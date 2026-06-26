@@ -131,41 +131,32 @@ def _to_gql_result(r: ReleaseResult) -> ReleaseResultGQL:
         traceability=traceability,
     )
 
-# ── Pipeline stub ────────────────────────────────────────────────────────
+# ── Pipeline ─────────────────────────────────────────────────────────────
 
 async def run_release_pipeline(job_id: str, version: str, from_ref: str, channel: str) -> None:
-    """Runs the full release pipeline. coordinator.run() will be wired in Task 11."""
+    """Runs the full release pipeline via coordinator."""
     jobs[job_id]["status"] = "RUNNING"
     try:
+        from release_pilot.coordinator import run as coordinator_run
+
         commits = get_commits(from_ref=from_ref)
         parsed = parse_commits(commits)
         changeset = build_changeset(version, from_ref, parsed)
 
-        # Placeholder result until coordinator is wired in Task 11
-        from release_pilot.models import ReadinessReport, ReleaseResult
-        placeholder_result = ReleaseResult(
-            version=version,
-            suggested_bump=changeset.suggested_bump,
-            readiness=ReadinessReport(
-                score=75,
-                recommendation="HOLD",
-                rationale="Pipeline stub — coordinator not yet wired.",
-                risk_factors=["Coordinator not implemented yet"],
-                rollback_plan="N/A",
-            ),
-            internal_announcement=f"[STUB] Release {version} triggered with {len(parsed)} commits.",
-            customer_notes=f"[STUB] Customer notes for {version}.",
-            traceability=[],
-        )
+        result = await coordinator_run(changeset)
 
         jobs[job_id]["status"] = "DONE"
-        jobs[job_id]["result"] = placeholder_result
+        jobs[job_id]["result"] = result
 
         if not release_exists(version):
-            save_release(placeholder_result, from_ref)
+            save_release(result, from_ref)
+
+        # Slack posting will be added in Task 12
+
     except Exception as e:
+        import traceback
         jobs[job_id]["status"] = "ERROR"
-        jobs[job_id]["error"] = str(e)
+        jobs[job_id]["error"] = f"{type(e).__name__}: {e}\n{traceback.format_exc()}"
 
 # ── GraphQL schema ────────────────────────────────────────────────────────
 
