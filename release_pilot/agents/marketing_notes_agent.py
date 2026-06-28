@@ -17,7 +17,7 @@ If no commits qualify for marketing-tier announcement, return null for marketing
 
 Return ONE JSON object only — no prose, no markdown fences:
 {
-  "marketing_notes": "## MujinOS v2.3.0 Delivers..."
+  "marketing_notes": "## NyankoOS v2.3.0 Delivers..."
 }
 
 OR if nothing is marketing-worthy:

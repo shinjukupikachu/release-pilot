@@ -15,7 +15,7 @@ class CommitInfo:
 
 @dataclass
 class JiraTicket:
-    key: str           # e.g. MUJIN-456
+    key: str           # e.g. NYANKO-456
     summary: str
     status: str        # e.g. "Done"
     issue_type: str    # e.g. "Bug", "Story", "Task"
@@ -45,7 +45,7 @@ class ParsedCommit:
     is_breaking: bool       # True if ! suffix or BREAKING CHANGE in body
     breaking_note: str | None  # text after "BREAKING CHANGE: " in body
     clean_subject: str      # subject without type(scope)!: prefix
-    jira_keys: list[str] = field(default_factory=list)  # e.g. ["MUJIN-456"]
+    jira_keys: list[str] = field(default_factory=list)  # e.g. ["NYANKO-456"]
     audience: str | None = None   # "internal" | "customer" | "marketing" — set by classifier agent
     # enrichment fields (set after MCP phase)
     jira_tickets: list[JiraTicket] = field(default_factory=list)

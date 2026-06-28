@@ -39,17 +39,17 @@ class TestParseSubject:
 
 class TestParseBody:
     def test_extracts_jira_keys(self):
-        note, keys = parse_body("Fixes bug.\n\nMUJIN-456")
-        assert "MUJIN-456" in keys
+        note, keys = parse_body("Fixes bug.\n\nNYANKO-456")
+        assert "NYANKO-456" in keys
 
     def test_extracts_breaking_note(self):
-        note, keys = parse_body("BREAKING CHANGE: /api/v1 removed.\n\nMUJIN-789")
+        note, keys = parse_body("BREAKING CHANGE: /api/v1 removed.\n\nNYANKO-789")
         assert note == "/api/v1 removed."
-        assert "MUJIN-789" in keys
+        assert "NYANKO-789" in keys
 
     def test_deduplicates_keys(self):
-        _, keys = parse_body("MUJIN-456 is fixed. See MUJIN-456 for details.")
-        assert keys.count("MUJIN-456") == 1
+        _, keys = parse_body("NYANKO-456 is fixed. See NYANKO-456 for details.")
+        assert keys.count("NYANKO-456") == 1
 
     def test_no_jira_keys(self):
         note, keys = parse_body("Simple fix, no ticket.")
@@ -58,16 +58,16 @@ class TestParseBody:
 
 class TestParseCommit:
     def test_jira_key_dedup_across_subject_and_body(self, sample_commit_infos):
-        # commit with MUJIN-456 in both subject and body
-        commit = sample_commit_infos[0]  # subject has MUJIN-456, body has MUJIN-456
+        # commit with NYANKO-456 in both subject and body
+        commit = sample_commit_infos[0]  # subject has NYANKO-456, body has NYANKO-456
         parsed = parse_commit(commit)
-        assert parsed.jira_keys.count("MUJIN-456") == 1
+        assert parsed.jira_keys.count("NYANKO-456") == 1
 
     def test_breaking_from_body(self, sample_commit_infos):
         commit = sample_commit_infos[1]  # has BREAKING CHANGE in body
         parsed = parse_commit(commit)
         assert parsed.is_breaking is True
-        assert "MUJIN-789" in parsed.jira_keys
+        assert "NYANKO-789" in parsed.jira_keys
 
     def test_parse_commits_returns_all(self, sample_commit_infos):
         parsed = parse_commits(sample_commit_infos)

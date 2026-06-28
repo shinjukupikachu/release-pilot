@@ -8,7 +8,7 @@ Your job: call get_jira_issue ONCE for each unique key. Do NOT call it more than
 
 Input format:
 {
-  "jira_keys": ["MUJIN-456", "MUJIN-789", ...]
+  "jira_keys": ["NYANKO-456", "NYANKO-789", ...]
 }
 
 For each key in jira_keys:
@@ -18,8 +18,8 @@ For each key in jira_keys:
 Return ONE JSON object only — no prose, no markdown fences:
 {
   "issues": {
-    "MUJIN-456": {
-      "key": "MUJIN-456",
+    "NYANKO-456": {
+      "key": "NYANKO-456",
       "summary": "Vision-guided pick confirmation for grasping module",
       "status": "Done",
       "issue_type": "Story",
@@ -29,7 +29,7 @@ Return ONE JSON object only — no prose, no markdown fences:
 }
 
 If get_jira_issue returns {"error": "not_found", "key": "..."}, include it as:
-{"key": "MUJIN-XXX", "summary": "Not found", "status": "Unknown", "issue_type": "Unknown", "priority": null}
+{"key": "NYANKO-XXX", "summary": "Not found", "status": "Unknown", "issue_type": "Unknown", "priority": null}
 
 Return ONLY the JSON object. No explanations.
 """

@@ -2,7 +2,7 @@
   "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2": {
     "number": 45,
     "title": "feat(picking): add vision-guided pick confirmation",
-    "html_url": "https://github.com/mujin/mujinos/pull/45",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/45",
     "user": {
       "login": "kenji-w"
     }
@@ -10,7 +10,7 @@
   "b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3": {
     "number": 46,
     "title": "feat(api)!: rename robot-status to /api/v2/status",
-    "html_url": "https://github.com/mujin/mujinos/pull/46",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/46",
     "user": {
       "login": "sara-c"
     }
@@ -18,7 +18,7 @@
   "c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4": {
     "number": 47,
     "title": "fix(palletizing): resolve stack overflow on dense layer calculations",
-    "html_url": "https://github.com/mujin/mujinos/pull/47",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/47",
     "user": {
       "login": "tomas-r"
     }
@@ -26,7 +26,7 @@
   "d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5": {
     "number": 48,
     "title": "perf(planner): reduce motion planning latency by 40%",
-    "html_url": "https://github.com/mujin/mujinos/pull/48",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/48",
     "user": {
       "login": "kenji-w"
     }
@@ -34,7 +34,7 @@
   "e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6": {
     "number": 49,
     "title": "fix(auth): patch token refresh race condition",
-    "html_url": "https://github.com/mujin/mujinos/pull/49",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/49",
     "user": {
       "login": "yuki-t"
     }
@@ -42,7 +42,7 @@
   "f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1": {
     "number": 50,
     "title": "chore(ci): upgrade GitHub Actions runners to ubuntu-22.04",
-    "html_url": "https://github.com/mujin/mujinos/pull/50",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/50",
     "user": {
       "login": "sara-c"
     }
@@ -50,7 +50,7 @@
   "a7b8c9d0e1f2a7b8c9d0e1f2a7b8c9d0e1f2a7b8": {
     "number": 51,
     "title": "feat(monitoring): add real-time joint temperature alerts",
-    "html_url": "https://github.com/mujin/mujinos/pull/51",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/51",
     "user": {
       "login": "tomas-r"
     }
@@ -58,7 +58,7 @@
   "b8c9d0e1f2a3b8c9d0e1f2a3b8c9d0e1f2a3b8c9": {
     "number": 52,
     "title": "docs(api): update REST API reference for v2 status endpoint",
-    "html_url": "https://github.com/mujin/mujinos/pull/52",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/52",
     "user": {
       "login": "yuki-t"
     }
@@ -66,7 +66,7 @@
   "c9d0e1f2a3b4c9d0e1f2a3b4c9d0e1f2a3b4c9d0": {
     "number": 53,
     "title": "fix(vision): improve depth sensor calibration in low-light",
-    "html_url": "https://github.com/mujin/mujinos/pull/53",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/53",
     "user": {
       "login": "kenji-w"
     }
@@ -74,7 +74,7 @@
   "d0e1f2a3b4c5d0e1f2a3b4c5d0e1f2a3b4c5d0e1": {
     "number": 54,
     "title": "feat(integration): add SAP EWM connector",
-    "html_url": "https://github.com/mujin/mujinos/pull/54",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/54",
     "user": {
       "login": "sara-c"
     }
@@ -82,7 +82,7 @@
   "e1f2a3b4c5d6e1f2a3b4c5d6e1f2a3b4c5d6e1f2": {
     "number": 55,
     "title": "refactor(core): migrate task scheduler to async event loop",
-    "html_url": "https://github.com/mujin/mujinos/pull/55",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/55",
     "user": {
       "login": "tomas-r"
     }
@@ -90,7 +90,7 @@
   "f2a3b4c5d6e7f2a3b4c5d6e7f2a3b4c5d6e7f2a3": {
     "number": 56,
     "title": "build(deps): upgrade OpenCV to 4.9.0",
-    "html_url": "https://github.com/mujin/mujinos/pull/56",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/56",
     "user": {
       "login": "yuki-t"
     }
@@ -98,7 +98,7 @@
   "a3b4c5d6e7f8a3b4c5d6e7f8a3b4c5d6e7f8a3b4": {
     "number": 57,
     "title": "feat(conveyor): dynamic speed adaptation for mixed-SKU lanes",
-    "html_url": "https://github.com/mujin/mujinos/pull/57",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/57",
     "user": {
       "login": "kenji-w"
     }
@@ -106,7 +106,7 @@
   "b4c5d6e7f8a9b4c5d6e7f8a9b4c5d6e7f8a9b4c5": {
     "number": 58,
     "title": "fix(gripper): handle suction cup pressure loss during high-speed transfer",
-    "html_url": "https://github.com/mujin/mujinos/pull/58",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/58",
     "user": {
       "login": "sara-c"
     }
@@ -114,7 +114,7 @@
   "c5d6e7f8a9b0c5d6e7f8a9b0c5d6e7f8a9b0c5d6": {
     "number": 59,
     "title": "feat(dashboard): add shift-level OEE report with drill-down by robot",
-    "html_url": "https://github.com/mujin/mujinos/pull/59",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/59",
     "user": {
       "login": "tomas-r"
     }
@@ -122,7 +122,7 @@
   "d6e7f8a9b0c1d6e7f8a9b0c1d6e7f8a9b0c1d6e7": {
     "number": 60,
     "title": "fix(network): resolve TCP keepalive drops on flaky warehouse Wi-Fi",
-    "html_url": "https://github.com/mujin/mujinos/pull/60",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/60",
     "user": {
       "login": "yuki-t"
     }
@@ -130,7 +130,7 @@
   "e7f8a9b0c1d2e7f8a9b0c1d2e7f8a9b0c1d2e7f8": {
     "number": 61,
     "title": "perf(vision): GPU-accelerate bounding box inference pipeline",
-    "html_url": "https://github.com/mujin/mujinos/pull/61",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/61",
     "user": {
       "login": "kenji-w"
     }
@@ -138,7 +138,7 @@
   "f8a9b0c1d2e3f8a9b0c1d2e3f8a9b0c1d2e3f8a9": {
     "number": 62,
     "title": "feat(sdk)!: remove deprecated RobotClient.connect_v1() method",
-    "html_url": "https://github.com/mujin/mujinos/pull/62",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/62",
     "user": {
       "login": "sara-c"
     }
@@ -146,7 +146,7 @@
   "a9b0c1d2e3f4a9b0c1d2e3f4a9b0c1d2e3f4a9b0": {
     "number": 63,
     "title": "fix(planner): prevent deadlock on concurrent multi-arm task handoff",
-    "html_url": "https://github.com/mujin/mujinos/pull/63",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/63",
     "user": {
       "login": "tomas-r"
     }
@@ -154,7 +154,7 @@
   "b0c1d2e3f4a5b0c1d2e3f4a5b0c1d2e3f4a5b0c1": {
     "number": 64,
     "title": "feat(security): enforce mTLS on all inter-service connections",
-    "html_url": "https://github.com/mujin/mujinos/pull/64",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/64",
     "user": {
       "login": "yuki-t"
     }
@@ -162,7 +162,7 @@
   "c1d2e3f4a5b6c1d2e3f4a5b6c1d2e3f4a5b6c1d2": {
     "number": 65,
     "title": "chore(lint): enforce ruff formatting across all Python modules",
-    "html_url": "https://github.com/mujin/mujinos/pull/65",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/65",
     "user": {
       "login": "kenji-w"
     }
@@ -170,7 +170,7 @@
   "d2e3f4a5b6c7d2e3f4a5b6c7d2e3f4a5b6c7d2e3": {
     "number": 66,
     "title": "feat(localization): add Japanese UI locale (ja-JP)",
-    "html_url": "https://github.com/mujin/mujinos/pull/66",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/66",
     "user": {
       "login": "sara-c"
     }
@@ -178,7 +178,7 @@
   "e3f4a5b6c7d8e3f4a5b6c7d8e3f4a5b6c7d8e3f4": {
     "number": 67,
     "title": "fix(telemetry): drop duplicate heartbeat events on reconnect",
-    "html_url": "https://github.com/mujin/mujinos/pull/67",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/67",
     "user": {
       "login": "tomas-r"
     }
@@ -186,7 +186,7 @@
   "f4a5b6c7d8e9f4a5b6c7d8e9f4a5b6c7d8e9f4a5": {
     "number": 68,
     "title": "test(integration): add end-to-end pick-and-place regression suite",
-    "html_url": "https://github.com/mujin/mujinos/pull/68",
+    "html_url": "https://github.com/nyanko/nyankoos/pull/68",
     "user": {
       "login": "yuki-t"
     }

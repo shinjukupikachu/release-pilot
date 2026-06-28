@@ -10,7 +10,7 @@ mcp = FastMCP("release-pilot-mock")
 
 @mcp.tool()
 def get_jira_issue(key: str) -> dict:
-    """Get a Jira issue by key (e.g. MUJIN-456).
+    """Get a Jira issue by key (e.g. NYANKO-456).
     Returns issue summary, status, type, and priority."""
     data = json.loads((TEST_DATA / "jira_issues.json").read_text())
     return data.get(key, {"error": "not_found", "key": key})

@@ -1,6 +1,6 @@
 {
-  "MUJIN-100": {
-    "key": "MUJIN-100",
+  "NYANKO-100": {
+    "key": "NYANKO-100",
     "fields": {
       "summary": "Add end-to-end pick-and-place integration test suite",
       "status": {
@@ -14,8 +14,8 @@
       }
     }
   },
-  "MUJIN-101": {
-    "key": "MUJIN-101",
+  "NYANKO-101": {
+    "key": "NYANKO-101",
     "fields": {
       "summary": "Collision avoidance false positives with narrow aisle shelving",
       "status": {
@@ -29,8 +29,8 @@
       }
     }
   },
-  "MUJIN-102": {
-    "key": "MUJIN-102",
+  "NYANKO-102": {
+    "key": "NYANKO-102",
     "fields": {
       "summary": "Support multi-robot task queuing with priority lanes",
       "status": {
@@ -44,8 +44,8 @@
       }
     }
   },
-  "MUJIN-103": {
-    "key": "MUJIN-103",
+  "NYANKO-103": {
+    "key": "NYANKO-103",
     "fields": {
       "summary": "Export cycle time reports to CSV from dashboard",
       "status": {
@@ -59,8 +59,8 @@
       }
     }
   },
-  "MUJIN-104": {
-    "key": "MUJIN-104",
+  "NYANKO-104": {
+    "key": "NYANKO-104",
     "fields": {
       "summary": "Gripper jaw calibration drift after 10k cycles",
       "status": {
@@ -74,8 +74,8 @@
       }
     }
   },
-  "MUJIN-105": {
-    "key": "MUJIN-105",
+  "NYANKO-105": {
+    "key": "NYANKO-105",
     "fields": {
       "summary": "Waypoint editor crashes on import of >500 waypoint files",
       "status": {
@@ -89,8 +89,8 @@
       }
     }
   },
-  "MUJIN-106": {
-    "key": "MUJIN-106",
+  "NYANKO-106": {
+    "key": "NYANKO-106",
     "fields": {
       "summary": "Add barcode scan fallback when vision model confidence < 0.7",
       "status": {
@@ -104,8 +104,8 @@
       }
     }
   },
-  "MUJIN-107": {
-    "key": "MUJIN-107",
+  "NYANKO-107": {
+    "key": "NYANKO-107",
     "fields": {
       "summary": "Robot arm E-stop does not propagate to conveyor belt PLC",
       "status": {
@@ -119,8 +119,8 @@
       }
     }
   },
-  "MUJIN-108": {
-    "key": "MUJIN-108",
+  "NYANKO-108": {
+    "key": "NYANKO-108",
     "fields": {
       "summary": "Build REST SDK for Python 3.11+",
       "status": {
@@ -134,8 +134,8 @@
       }
     }
   },
-  "MUJIN-109": {
-    "key": "MUJIN-109",
+  "NYANKO-109": {
+    "key": "NYANKO-109",
     "fields": {
       "summary": "Localization string missing for error code E4021 in German locale",
       "status": {
@@ -149,8 +149,8 @@
       }
     }
   },
-  "MUJIN-110": {
-    "key": "MUJIN-110",
+  "NYANKO-110": {
+    "key": "NYANKO-110",
     "fields": {
       "summary": "Memory leak in point cloud pre-processing pipeline",
       "status": {
@@ -164,8 +164,8 @@
       }
     }
   },
-  "MUJIN-111": {
-    "key": "MUJIN-111",
+  "NYANKO-111": {
+    "key": "NYANKO-111",
     "fields": {
       "summary": "Add Kubernetes liveness and readiness probes to all services",
       "status": {
@@ -179,8 +179,8 @@
       }
     }
   },
-  "MUJIN-112": {
-    "key": "MUJIN-112",
+  "NYANKO-112": {
+    "key": "NYANKO-112",
     "fields": {
       "summary": "Suction cup pressure loss during high-speed transfers causes undetected drops",
       "status": {
@@ -194,8 +194,8 @@
       }
     }
   },
-  "MUJIN-113": {
-    "key": "MUJIN-113",
+  "NYANKO-113": {
+    "key": "NYANKO-113",
     "fields": {
       "summary": "Integrate OpenTelemetry tracing across controller services",
       "status": {
@@ -209,8 +209,8 @@
       }
     }
   },
-  "MUJIN-114": {
-    "key": "MUJIN-114",
+  "NYANKO-114": {
+    "key": "NYANKO-114",
     "fields": {
       "summary": "Wrist camera loses calibration after firmware update 3.1.4",
       "status": {
@@ -224,8 +224,8 @@
       }
     }
   },
-  "MUJIN-115": {
-    "key": "MUJIN-115",
+  "NYANKO-115": {
+    "key": "NYANKO-115",
     "fields": {
       "summary": "Path planner generates infeasible trajectories near singularity",
       "status": {
@@ -239,8 +239,8 @@
       }
     }
   },
-  "MUJIN-116": {
-    "key": "MUJIN-116",
+  "NYANKO-116": {
+    "key": "NYANKO-116",
     "fields": {
       "summary": "Add SCIM 2.0 user provisioning for enterprise SSO",
       "status": {
@@ -254,8 +254,8 @@
       }
     }
   },
-  "MUJIN-117": {
-    "key": "MUJIN-117",
+  "NYANKO-117": {
+    "key": "NYANKO-117",
     "fields": {
       "summary": "Dashboard session times out silently without notification",
       "status": {
@@ -269,8 +269,8 @@
       }
     }
   },
-  "MUJIN-118": {
-    "key": "MUJIN-118",
+  "NYANKO-118": {
+    "key": "NYANKO-118",
     "fields": {
       "summary": "Support Cognex In-Sight 9000 series camera integration",
       "status": {
@@ -284,8 +284,8 @@
       }
     }
   },
-  "MUJIN-119": {
-    "key": "MUJIN-119",
+  "NYANKO-119": {
+    "key": "NYANKO-119",
     "fields": {
       "summary": "Palletizing pattern editor does not render mixed-height layers",
       "status": {
@@ -299,8 +299,8 @@
       }
     }
   },
-  "MUJIN-120": {
-    "key": "MUJIN-120",
+  "NYANKO-120": {
+    "key": "NYANKO-120",
     "fields": {
       "summary": "Add webhook support for task completion events",
       "status": {
@@ -314,8 +314,8 @@
       }
     }
   },
-  "MUJIN-123": {
-    "key": "MUJIN-123",
+  "NYANKO-123": {
+    "key": "NYANKO-123",
     "fields": {
       "summary": "Depth sensor calibration fails in low ambient light environments",
       "status": {
@@ -329,10 +329,10 @@
       }
     }
   },
-  "MUJIN-200": {
-    "key": "MUJIN-200",
+  "NYANKO-200": {
+    "key": "NYANKO-200",
     "fields": {
-      "summary": "Epic: MujinOS v2.2 \u2014 Stability & Performance",
+      "summary": "Epic: NyankoOS v2.2 \u2014 Stability & Performance",
       "status": {
         "name": "Done"
       },
@@ -344,8 +344,8 @@
       }
     }
   },
-  "MUJIN-201": {
-    "key": "MUJIN-201",
+  "NYANKO-201": {
+    "key": "NYANKO-201",
     "fields": {
       "summary": "Conveyor tracking loses sync at >2.0 m/s belt speed",
       "status": {
@@ -359,8 +359,8 @@
       }
     }
   },
-  "MUJIN-202": {
-    "key": "MUJIN-202",
+  "NYANKO-202": {
+    "key": "NYANKO-202",
     "fields": {
       "summary": "Support variable conveyor speed via PLC analog signal",
       "status": {
@@ -374,8 +374,8 @@
       }
     }
   },
-  "MUJIN-203": {
-    "key": "MUJIN-203",
+  "NYANKO-203": {
+    "key": "NYANKO-203",
     "fields": {
       "summary": "Add robot idle timeout and auto-park to home position",
       "status": {
@@ -389,8 +389,8 @@
       }
     }
   },
-  "MUJIN-204": {
-    "key": "MUJIN-204",
+  "NYANKO-204": {
+    "key": "NYANKO-204",
     "fields": {
       "summary": "URDF import fails with non-standard joint naming convention",
       "status": {
@@ -404,8 +404,8 @@
       }
     }
   },
-  "MUJIN-205": {
-    "key": "MUJIN-205",
+  "NYANKO-205": {
+    "key": "NYANKO-205",
     "fields": {
       "summary": "Cycle count resets to zero after midnight UTC crossover",
       "status": {
@@ -419,8 +419,8 @@
       }
     }
   },
-  "MUJIN-206": {
-    "key": "MUJIN-206",
+  "NYANKO-206": {
+    "key": "NYANKO-206",
     "fields": {
       "summary": "Implement dark mode for operator dashboard",
       "status": {
@@ -434,8 +434,8 @@
       }
     }
   },
-  "MUJIN-207": {
-    "key": "MUJIN-207",
+  "NYANKO-207": {
+    "key": "NYANKO-207",
     "fields": {
       "summary": "Add support for Fanuc CRX collaborative robot series",
       "status": {
@@ -449,8 +449,8 @@
       }
     }
   },
-  "MUJIN-208": {
-    "key": "MUJIN-208",
+  "NYANKO-208": {
+    "key": "NYANKO-208",
     "fields": {
       "summary": "Controller CPU spikes to 100% during point cloud registration",
       "status": {
@@ -464,8 +464,8 @@
       }
     }
   },
-  "MUJIN-209": {
-    "key": "MUJIN-209",
+  "NYANKO-209": {
+    "key": "NYANKO-209",
     "fields": {
       "summary": "Task log export truncates entries beyond 10,000 records",
       "status": {
@@ -479,8 +479,8 @@
       }
     }
   },
-  "MUJIN-210": {
-    "key": "MUJIN-210",
+  "NYANKO-210": {
+    "key": "NYANKO-210",
     "fields": {
       "summary": "Implement RBAC roles: Operator, Engineer, Admin",
       "status": {
@@ -494,8 +494,8 @@
       }
     }
   },
-  "MUJIN-234": {
-    "key": "MUJIN-234",
+  "NYANKO-234": {
+    "key": "NYANKO-234",
     "fields": {
       "summary": "Stack overflow in dense palletizing layer solver (>8 SKU types)",
       "status": {
@@ -509,10 +509,10 @@
       }
     }
   },
-  "MUJIN-300": {
-    "key": "MUJIN-300",
+  "NYANKO-300": {
+    "key": "NYANKO-300",
     "fields": {
-      "summary": "Epic: MujinOS v2.3 \u2014 Enterprise & Scale",
+      "summary": "Epic: NyankoOS v2.3 \u2014 Enterprise & Scale",
       "status": {
         "name": "In Progress"
       },
@@ -524,8 +524,8 @@
       }
     }
   },
-  "MUJIN-301": {
-    "key": "MUJIN-301",
+  "NYANKO-301": {
+    "key": "NYANKO-301",
     "fields": {
       "summary": "Multi-site fleet management dashboard",
       "status": {
@@ -539,8 +539,8 @@
       }
     }
   },
-  "MUJIN-302": {
-    "key": "MUJIN-302",
+  "NYANKO-302": {
+    "key": "NYANKO-302",
     "fields": {
       "summary": "Predictive maintenance alerts from joint vibration data",
       "status": {
@@ -554,8 +554,8 @@
       }
     }
   },
-  "MUJIN-303": {
-    "key": "MUJIN-303",
+  "NYANKO-303": {
+    "key": "NYANKO-303",
     "fields": {
       "summary": "Zero-downtime rolling update for controller firmware",
       "status": {
@@ -569,8 +569,8 @@
       }
     }
   },
-  "MUJIN-304": {
-    "key": "MUJIN-304",
+  "NYANKO-304": {
+    "key": "NYANKO-304",
     "fields": {
       "summary": "Add Korean UI locale (ko-KR)",
       "status": {
@@ -584,8 +584,8 @@
       }
     }
   },
-  "MUJIN-305": {
-    "key": "MUJIN-305",
+  "NYANKO-305": {
+    "key": "NYANKO-305",
     "fields": {
       "summary": "API rate limiting for third-party integrations",
       "status": {
@@ -599,8 +599,8 @@
       }
     }
   },
-  "MUJIN-306": {
-    "key": "MUJIN-306",
+  "NYANKO-306": {
+    "key": "NYANKO-306",
     "fields": {
       "summary": "Arm trajectory replay for incident forensics",
       "status": {
@@ -614,8 +614,8 @@
       }
     }
   },
-  "MUJIN-307": {
-    "key": "MUJIN-307",
+  "NYANKO-307": {
+    "key": "NYANKO-307",
     "fields": {
       "summary": "Vision model hot-reload without controller restart",
       "status": {
@@ -629,8 +629,8 @@
       }
     }
   },
-  "MUJIN-308": {
-    "key": "MUJIN-308",
+  "NYANKO-308": {
+    "key": "NYANKO-308",
     "fields": {
       "summary": "Support KUKA iiQKA OS 1.2 motion interface",
       "status": {
@@ -644,8 +644,8 @@
       }
     }
   },
-  "MUJIN-309": {
-    "key": "MUJIN-309",
+  "NYANKO-309": {
+    "key": "NYANKO-309",
     "fields": {
       "summary": "Offline mode: queue tasks when cloud connectivity lost",
       "status": {
@@ -659,8 +659,8 @@
       }
     }
   },
-  "MUJIN-310": {
-    "key": "MUJIN-310",
+  "NYANKO-310": {
+    "key": "NYANKO-310",
     "fields": {
       "summary": "Automated bin-level replenishment alerts via WMS webhook",
       "status": {
@@ -674,8 +674,8 @@
       }
     }
   },
-  "MUJIN-333": {
-    "key": "MUJIN-333",
+  "NYANKO-333": {
+    "key": "NYANKO-333",
     "fields": {
       "summary": "TCP keepalive drops on 2.4GHz warehouse Wi-Fi after 8 min idle",
       "status": {
@@ -689,8 +689,8 @@
       }
     }
   },
-  "MUJIN-345": {
-    "key": "MUJIN-345",
+  "NYANKO-345": {
+    "key": "NYANKO-345",
     "fields": {
       "summary": "Real-time joint temperature monitoring and overheat alerts",
       "status": {
@@ -704,8 +704,8 @@
       }
     }
   },
-  "MUJIN-400": {
-    "key": "MUJIN-400",
+  "NYANKO-400": {
+    "key": "NYANKO-400",
     "fields": {
       "summary": "Pick accuracy below 97% on clear polybag SKUs",
       "status": {
@@ -719,8 +719,8 @@
       }
     }
   },
-  "MUJIN-401": {
-    "key": "MUJIN-401",
+  "NYANKO-401": {
+    "key": "NYANKO-401",
     "fields": {
       "summary": "Arm oscillates at end-effector deceleration on heavy payloads",
       "status": {
@@ -734,8 +734,8 @@
       }
     }
   },
-  "MUJIN-402": {
-    "key": "MUJIN-402",
+  "NYANKO-402": {
+    "key": "NYANKO-402",
     "fields": {
       "summary": "SKU master import rejects CSV with BOM encoding",
       "status": {
@@ -749,8 +749,8 @@
       }
     }
   },
-  "MUJIN-403": {
-    "key": "MUJIN-403",
+  "NYANKO-403": {
+    "key": "NYANKO-403",
     "fields": {
       "summary": "Controller NTP sync drift causes task timestamp skew",
       "status": {
@@ -764,8 +764,8 @@
       }
     }
   },
-  "MUJIN-404": {
-    "key": "MUJIN-404",
+  "NYANKO-404": {
+    "key": "NYANKO-404",
     "fields": {
       "summary": "Web dashboard 404 on direct URL navigation to /tasks/:id",
       "status": {
@@ -779,8 +779,8 @@
       }
     }
   },
-  "MUJIN-405": {
-    "key": "MUJIN-405",
+  "NYANKO-405": {
+    "key": "NYANKO-405",
     "fields": {
       "summary": "Force-torque sensor readings not surfaced in task telemetry",
       "status": {
@@ -794,8 +794,8 @@
       }
     }
   },
-  "MUJIN-406": {
-    "key": "MUJIN-406",
+  "NYANKO-406": {
+    "key": "NYANKO-406",
     "fields": {
       "summary": "Add gripper fingertip pressure visualization to debug panel",
       "status": {
@@ -809,8 +809,8 @@
       }
     }
   },
-  "MUJIN-407": {
-    "key": "MUJIN-407",
+  "NYANKO-407": {
+    "key": "NYANKO-407",
     "fields": {
       "summary": "SLAM map corrupts on controller hard power cycle",
       "status": {
@@ -824,8 +824,8 @@
       }
     }
   },
-  "MUJIN-408": {
-    "key": "MUJIN-408",
+  "NYANKO-408": {
+    "key": "NYANKO-408",
     "fields": {
       "summary": "Add visual alarm badge to robot tiles for E-stop state",
       "status": {
@@ -839,8 +839,8 @@
       }
     }
   },
-  "MUJIN-409": {
-    "key": "MUJIN-409",
+  "NYANKO-409": {
+    "key": "NYANKO-409",
     "fields": {
       "summary": "Throughput metric does not account for regrasp attempts",
       "status": {
@@ -854,8 +854,8 @@
       }
     }
   },
-  "MUJIN-410": {
-    "key": "MUJIN-410",
+  "NYANKO-410": {
+    "key": "NYANKO-410",
     "fields": {
       "summary": "Implement task priority override via operator panel",
       "status": {
@@ -869,8 +869,8 @@
       }
     }
   },
-  "MUJIN-444": {
-    "key": "MUJIN-444",
+  "NYANKO-444": {
+    "key": "NYANKO-444",
     "fields": {
       "summary": "GPU-accelerate bounding box inference via TensorRT",
       "status": {
@@ -884,8 +884,8 @@
       }
     }
   },
-  "MUJIN-456": {
-    "key": "MUJIN-456",
+  "NYANKO-456": {
+    "key": "NYANKO-456",
     "fields": {
       "summary": "Vision-guided pick confirmation for grasping module",
       "status": {
@@ -899,8 +899,8 @@
       }
     }
   },
-  "MUJIN-500": {
-    "key": "MUJIN-500",
+  "NYANKO-500": {
+    "key": "NYANKO-500",
     "fields": {
       "summary": "Epic: Vision System 2.0",
       "status": {
@@ -914,8 +914,8 @@
       }
     }
   },
-  "MUJIN-501": {
-    "key": "MUJIN-501",
+  "NYANKO-501": {
+    "key": "NYANKO-501",
     "fields": {
       "summary": "3D point cloud segmentation model for deformable items",
       "status": {
@@ -929,8 +929,8 @@
       }
     }
   },
-  "MUJIN-502": {
-    "key": "MUJIN-502",
+  "NYANKO-502": {
+    "key": "NYANKO-502",
     "fields": {
       "summary": "Shift-level OEE dashboard with drill-down by robot arm",
       "status": {
@@ -944,8 +944,8 @@
       }
     }
   },
-  "MUJIN-503": {
-    "key": "MUJIN-503",
+  "NYANKO-503": {
+    "key": "NYANKO-503",
     "fields": {
       "summary": "Multi-camera rig calibration wizard for new installations",
       "status": {
@@ -959,8 +959,8 @@
       }
     }
   },
-  "MUJIN-504": {
-    "key": "MUJIN-504",
+  "NYANKO-504": {
+    "key": "NYANKO-504",
     "fields": {
       "summary": "False positive collision detection in reflective packaging environments",
       "status": {
@@ -974,8 +974,8 @@
       }
     }
   },
-  "MUJIN-505": {
-    "key": "MUJIN-505",
+  "NYANKO-505": {
+    "key": "NYANKO-505",
     "fields": {
       "summary": "Add confidence score threshold UI control for pick decisions",
       "status": {
@@ -989,8 +989,8 @@
       }
     }
   },
-  "MUJIN-506": {
-    "key": "MUJIN-506",
+  "NYANKO-506": {
+    "key": "NYANKO-506",
     "fields": {
       "summary": "Vision pipeline hangs on zero-byte frame from USB camera",
       "status": {
@@ -1004,8 +1004,8 @@
       }
     }
   },
-  "MUJIN-507": {
-    "key": "MUJIN-507",
+  "NYANKO-507": {
+    "key": "NYANKO-507",
     "fields": {
       "summary": "Stereo depth estimation degrades on specular surfaces",
       "status": {
@@ -1019,8 +1019,8 @@
       }
     }
   },
-  "MUJIN-555": {
-    "key": "MUJIN-555",
+  "NYANKO-555": {
+    "key": "NYANKO-555",
     "fields": {
       "summary": "Remove deprecated RobotClient.connect_v1() after 6-month window",
       "status": {
@@ -1034,8 +1034,8 @@
       }
     }
   },
-  "MUJIN-567": {
-    "key": "MUJIN-567",
+  "NYANKO-567": {
+    "key": "NYANKO-567",
     "fields": {
       "summary": "Reduce motion planning latency for repeated task sequences",
       "status": {
@@ -1049,8 +1049,8 @@
       }
     }
   },
-  "MUJIN-600": {
-    "key": "MUJIN-600",
+  "NYANKO-600": {
+    "key": "NYANKO-600",
     "fields": {
       "summary": "Epic: WMS & ERP Integrations",
       "status": {
@@ -1064,8 +1064,8 @@
       }
     }
   },
-  "MUJIN-601": {
-    "key": "MUJIN-601",
+  "NYANKO-601": {
+    "key": "NYANKO-601",
     "fields": {
       "summary": "Manhattan Associates WM connector",
       "status": {
@@ -1079,8 +1079,8 @@
       }
     }
   },
-  "MUJIN-602": {
-    "key": "MUJIN-602",
+  "NYANKO-602": {
+    "key": "NYANKO-602",
     "fields": {
       "summary": "Blue Yonder Luminate WMS integration",
       "status": {
@@ -1094,8 +1094,8 @@
       }
     }
   },
-  "MUJIN-603": {
-    "key": "MUJIN-603",
+  "NYANKO-603": {
+    "key": "NYANKO-603",
     "fields": {
       "summary": "Oracle WMS Cloud REST adapter",
       "status": {
@@ -1109,8 +1109,8 @@
       }
     }
   },
-  "MUJIN-604": {
-    "key": "MUJIN-604",
+  "NYANKO-604": {
+    "key": "NYANKO-604",
     "fields": {
       "summary": "WMS task sync delay >500ms on high-throughput lines",
       "status": {
@@ -1124,8 +1124,8 @@
       }
     }
   },
-  "MUJIN-605": {
-    "key": "MUJIN-605",
+  "NYANKO-605": {
+    "key": "NYANKO-605",
     "fields": {
       "summary": "Add SAP S/4HANA Embedded EWM connector",
       "status": {
@@ -1139,8 +1139,8 @@
       }
     }
   },
-  "MUJIN-666": {
-    "key": "MUJIN-666",
+  "NYANKO-666": {
+    "key": "NYANKO-666",
     "fields": {
       "summary": "Deadlock on concurrent multi-arm task handoff in shared zone",
       "status": {
@@ -1154,8 +1154,8 @@
       }
     }
   },
-  "MUJIN-678": {
-    "key": "MUJIN-678",
+  "NYANKO-678": {
+    "key": "NYANKO-678",
     "fields": {
       "summary": "SAP Extended Warehouse Management (EWM) integration connector",
       "status": {
@@ -1169,8 +1169,8 @@
       }
     }
   },
-  "MUJIN-700": {
-    "key": "MUJIN-700",
+  "NYANKO-700": {
+    "key": "NYANKO-700",
     "fields": {
       "summary": "Epic: Security & Compliance",
       "status": {
@@ -1184,8 +1184,8 @@
       }
     }
   },
-  "MUJIN-701": {
-    "key": "MUJIN-701",
+  "NYANKO-701": {
+    "key": "NYANKO-701",
     "fields": {
       "summary": "Implement audit log for all operator actions",
       "status": {
@@ -1199,8 +1199,8 @@
       }
     }
   },
-  "MUJIN-702": {
-    "key": "MUJIN-702",
+  "NYANKO-702": {
+    "key": "NYANKO-702",
     "fields": {
       "summary": "SOC 2 Type II evidence collection automation",
       "status": {
@@ -1214,8 +1214,8 @@
       }
     }
   },
-  "MUJIN-703": {
-    "key": "MUJIN-703",
+  "NYANKO-703": {
+    "key": "NYANKO-703",
     "fields": {
       "summary": "Secret rotation for API keys and controller certificates",
       "status": {
@@ -1229,8 +1229,8 @@
       }
     }
   },
-  "MUJIN-704": {
-    "key": "MUJIN-704",
+  "NYANKO-704": {
+    "key": "NYANKO-704",
     "fields": {
       "summary": "Vulnerability scan found open port 8883 on controller OS",
       "status": {
@@ -1244,8 +1244,8 @@
       }
     }
   },
-  "MUJIN-705": {
-    "key": "MUJIN-705",
+  "NYANKO-705": {
+    "key": "NYANKO-705",
     "fields": {
       "summary": "FIPS 140-2 compliant TLS cipher suite enforcement",
       "status": {
@@ -1259,8 +1259,8 @@
       }
     }
   },
-  "MUJIN-777": {
-    "key": "MUJIN-777",
+  "NYANKO-777": {
+    "key": "NYANKO-777",
     "fields": {
       "summary": "Enforce mTLS on all inter-service connections",
       "status": {
@@ -1274,8 +1274,8 @@
       }
     }
   },
-  "MUJIN-789": {
-    "key": "MUJIN-789",
+  "NYANKO-789": {
+    "key": "NYANKO-789",
     "fields": {
       "summary": "API versioning: migrate robot status endpoints to /api/v2/status",
       "status": {
@@ -1289,8 +1289,8 @@
       }
     }
   },
-  "MUJIN-800": {
-    "key": "MUJIN-800",
+  "NYANKO-800": {
+    "key": "NYANKO-800",
     "fields": {
       "summary": "Epic: Operator Experience",
       "status": {
@@ -1304,8 +1304,8 @@
       }
     }
   },
-  "MUJIN-801": {
-    "key": "MUJIN-801",
+  "NYANKO-801": {
+    "key": "NYANKO-801",
     "fields": {
       "summary": "Add guided setup wizard for first-time cell configuration",
       "status": {
@@ -1319,8 +1319,8 @@
       }
     }
   },
-  "MUJIN-802": {
-    "key": "MUJIN-802",
+  "NYANKO-802": {
+    "key": "NYANKO-802",
     "fields": {
       "summary": "Alarm acknowledgment requires two-tap confirmation on touchscreen",
       "status": {
@@ -1334,8 +1334,8 @@
       }
     }
   },
-  "MUJIN-803": {
-    "key": "MUJIN-803",
+  "NYANKO-803": {
+    "key": "NYANKO-803",
     "fields": {
       "summary": "Add Chinese (Simplified) UI locale (zh-CN)",
       "status": {
@@ -1349,8 +1349,8 @@
       }
     }
   },
-  "MUJIN-804": {
-    "key": "MUJIN-804",
+  "NYANKO-804": {
+    "key": "NYANKO-804",
     "fields": {
       "summary": "Mobile-responsive layout for operator dashboard on tablets",
       "status": {
@@ -1364,8 +1364,8 @@
       }
     }
   },
-  "MUJIN-850": {
-    "key": "MUJIN-850",
+  "NYANKO-850": {
+    "key": "NYANKO-850",
     "fields": {
       "summary": "QA: regression test failures on v2.2.1 palletizing smoke suite",
       "status": {
@@ -1379,8 +1379,8 @@
       }
     }
   },
-  "MUJIN-851": {
-    "key": "MUJIN-851",
+  "NYANKO-851": {
+    "key": "NYANKO-851",
     "fields": {
       "summary": "QA: vision model accuracy drops 3% after OpenCV upgrade to 4.8",
       "status": {
@@ -1394,8 +1394,8 @@
       }
     }
   },
-  "MUJIN-852": {
-    "key": "MUJIN-852",
+  "NYANKO-852": {
+    "key": "NYANKO-852",
     "fields": {
       "summary": "QA: load test at 500 concurrent API calls reveals thread pool exhaustion",
       "status": {
@@ -1409,8 +1409,8 @@
       }
     }
   },
-  "MUJIN-888": {
-    "key": "MUJIN-888",
+  "NYANKO-888": {
+    "key": "NYANKO-888",
     "fields": {
       "summary": "Add Japanese UI locale (ja-JP) for operator dashboard",
       "status": {
@@ -1424,8 +1424,8 @@
       }
     }
   },
-  "MUJIN-890": {
-    "key": "MUJIN-890",
+  "NYANKO-890": {
+    "key": "NYANKO-890",
     "fields": {
       "summary": "Token refresh race condition causes 401 loops under concurrent load",
       "status": {
@@ -1439,10 +1439,10 @@
       }
     }
   },
-  "MUJIN-900": {
-    "key": "MUJIN-900",
+  "NYANKO-900": {
+    "key": "NYANKO-900",
     "fields": {
-      "summary": "Epic: MujinOS v2.4 Planning",
+      "summary": "Epic: NyankoOS v2.4 Planning",
       "status": {
         "name": "To Do"
       },
@@ -1454,8 +1454,8 @@
       }
     }
   },
-  "MUJIN-901": {
-    "key": "MUJIN-901",
+  "NYANKO-901": {
+    "key": "NYANKO-901",
     "fields": {
       "summary": "Dynamic conveyor speed adaptation for mixed-SKU lanes",
       "status": {
@@ -1469,8 +1469,8 @@
       }
     }
   },
-  "MUJIN-902": {
-    "key": "MUJIN-902",
+  "NYANKO-902": {
+    "key": "NYANKO-902",
     "fields": {
       "summary": "Reinforcement learning-based grasp pose optimization",
       "status": {
@@ -1484,8 +1484,8 @@
       }
     }
   },
-  "MUJIN-903": {
-    "key": "MUJIN-903",
+  "NYANKO-903": {
+    "key": "NYANKO-903",
     "fields": {
       "summary": "Federated learning for shared vision model improvement across fleet",
       "status": {
@@ -1499,8 +1499,8 @@
       }
     }
   },
-  "MUJIN-950": {
-    "key": "MUJIN-950",
+  "NYANKO-950": {
+    "key": "NYANKO-950",
     "fields": {
       "summary": "Support Ubuntu 24.04 LTS as controller host OS",
       "status": {
@@ -1514,8 +1514,8 @@
       }
     }
   },
-  "MUJIN-999": {
-    "key": "MUJIN-999",
+  "NYANKO-999": {
+    "key": "NYANKO-999",
     "fields": {
       "summary": "Duplicate telemetry heartbeats on controller reconnect cause alert storms",
       "status": {
