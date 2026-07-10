@@ -1,12 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: release-pilot-svc
+  name: release-agent
+  namespace: release-agent
+  labels:
+    app: release-agent
 spec:
-  type: NodePort
+  type: ClusterIP
+
   selector:
-    app: release-pilot
+    app: release-agent
+
   ports:
-  - port: 8080
-    targetPort: 8080
-    nodePort: 30080
+    - name: http
+      port: 80
+      targetPort: 8080

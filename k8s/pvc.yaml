@@ -2,6 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: release-pilot-data
+  namespace: release-agent
 spec:
   accessModes:
     - ReadWriteOnce
