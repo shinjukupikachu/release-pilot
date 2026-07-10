@@ -43,9 +43,7 @@ class AuthorGroup:
 
     @property
     def open_tickets(self) -> list[JiraInfo]:
-        return [
-            t for t in self.jira_tickets if t.status.lower() not in ("done", "closed", "resolved")
-        ]
+        return [t for t in self.jira_tickets if t.status.lower() not in ("done", "closed", "resolved")]
 
     @property
     def closed_tickets(self) -> list[JiraInfo]:
@@ -96,15 +94,11 @@ def _load_commits_from_db(version: str, db_path: str = config.DB_PATH) -> list[d
     try:
         with sqlite3.connect(db_path) as conn:
             conn.row_factory = sqlite3.Row
-            release = conn.execute(
-                "SELECT id, from_ref FROM releases WHERE version = ?", (version,)
-            ).fetchone()
+            release = conn.execute("SELECT id, from_ref FROM releases WHERE version = ?", (version,)).fetchone()
             if not release:
                 return None, None
             rows = conn.execute(
-                "SELECT short_hash, description, jira_keys "
-                "FROM traceability_rows "
-                "WHERE release_id = ?",
+                "SELECT short_hash, description, jira_keys FROM traceability_rows WHERE release_id = ?",
                 (release["id"],),
             ).fetchall()
         commits = []

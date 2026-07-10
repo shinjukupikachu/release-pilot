@@ -29,11 +29,7 @@ def sample_commit_infos() -> list[CommitInfo]:
             author="Sara Chen",
             date="2026-06-20T11:30:00+09:00",
             subject="feat(api)!: rename /api/v1/robot-status to /api/v2/status (NYANKO-789)",
-            body=(
-                "BREAKING CHANGE: /api/v1/robot-status is removed. Clients must migrate "
-                "to /api/v2/status.\nNYANKO-789"
-
-            ),
+            body=("BREAKING CHANGE: /api/v1/robot-status is removed. Clients must migrate to /api/v2/status.\nNYANKO-789"),
         ),
         CommitInfo(
             hash="c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4",

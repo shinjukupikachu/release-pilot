@@ -15,9 +15,7 @@ class TestInitDb:
 
         init_db(tmp_db)
         with sqlite3.connect(tmp_db) as conn:
-            tables = {
-                row[0] for row in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")
-            }
+            tables = {row[0] for row in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")}
         assert "releases" in tables
         assert "traceability_rows" in tables
 

@@ -55,10 +55,7 @@ Recommendation thresholds:
 
 READINESS_AGENT = AgentDefinition(
     description="Release readiness scoring — Release Manager + QA Manager personas",
-    prompt=_load_runbook("release-manager")
-    + "\n\n"
-    + _load_runbook("qa-manager")
-    + _OUTPUT_CONTRACT,
+    prompt=_load_runbook("release-manager") + "\n\n" + _load_runbook("qa-manager") + _OUTPUT_CONTRACT,
     tools=[],
     model="sonnet",
 )

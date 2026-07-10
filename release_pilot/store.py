@@ -191,7 +191,4 @@ def list_releases(db_path: str = config.DB_PATH, limit: int = 20) -> list[Releas
 
 def release_exists(version: str, db_path: str = config.DB_PATH) -> bool:
     with sqlite3.connect(db_path) as conn:
-        return (
-            conn.execute("SELECT 1 FROM releases WHERE version = ?", (version,)).fetchone()
-            is not None
-        )
+        return conn.execute("SELECT 1 FROM releases WHERE version = ?", (version,)).fetchone() is not None

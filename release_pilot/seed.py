@@ -87,12 +87,7 @@ _RELEASES = [
         "suggested_bump": "minor",
         "readiness_score": 88,
         "recommendation": "READY",
-        "internal_announcement": (
-            "## NyankoOS v1.1.0\n\nFirst minor release since GA. Focuses on conveyor "
-            "tracking, multi-SKU support, and the Python SDK.\n\n**Key wins:** conveyor "
-            "tracking at up to 1.5 m/s, barcode fallback for low-confidence picks, SDK "
-            "published to PyPI."
-        ),
+        "internal_announcement": ("## NyankoOS v1.1.0\n\nFirst minor release since GA. Focuses on conveyor tracking, multi-SKU support, and the Python SDK.\n\n**Key wins:** conveyor tracking at up to 1.5 m/s, barcode fallback for low-confidence picks, SDK published to PyPI."),
         "customer_notes": (
             "## NyankoOS v1.1.0 — What's New\n\n### New Features\n\n**Conveyor Tracking** "
             "— Robots can now pick items from moving conveyors at speeds up to 1.5 m/s. "
@@ -106,12 +101,7 @@ _RELEASES = [
             "after 10,000 cycles\n- Fixed waypoint editor crash on import of files with "
             "more than 500 waypoints\n- Fixed dashboard session timeout with no notification"
         ),
-        "marketing_notes": (
-            "## NyankoOS v1.1 Adds Conveyor Tracking and Multi-SKU Support\n\nNyankoOS "
-            "1.1 brings two of the most-requested capabilities from our launch customers: "
-            "the ability to pick from moving conveyors and to handle diverse product "
-            "mixes in a single cell."
-        ),
+        "marketing_notes": ("## NyankoOS v1.1 Adds Conveyor Tracking and Multi-SKU Support\n\nNyankoOS 1.1 brings two of the most-requested capabilities from our launch customers: the ability to pick from moving conveyors and to handle diverse product mixes in a single cell."),
         "traceability": [
             {
                 "short_hash": "5e6f7a8",
@@ -147,10 +137,7 @@ _RELEASES = [
         "readiness_score": 92,
         "recommendation": "READY",
         "internal_announcement": (
-            "## NyankoOS v1.1.10 — Patch Release\n\nSecurity and stability patches. "
-            "All customers on v1.1.x should upgrade.\n\n- SLAM map corruption on hard "
-            "power cycle (critical)\n- Memory leak in point cloud pipeline "
-            "(critical)\n- E-stop not propagating to conveyor PLC (critical)"
+            "## NyankoOS v1.1.10 — Patch Release\n\nSecurity and stability patches. All customers on v1.1.x should upgrade.\n\n- SLAM map corruption on hard power cycle (critical)\n- Memory leak in point cloud pipeline (critical)\n- E-stop not propagating to conveyor PLC (critical)"
         ),
         "customer_notes": (
             "## NyankoOS v1.1.10 — Patch Release\n\nThis patch release addresses "
@@ -206,11 +193,7 @@ _RELEASES = [
         "suggested_bump": "minor",
         "readiness_score": 85,
         "recommendation": "READY",
-        "internal_announcement": (
-            "## NyankoOS v1.3.0\n\nBig release — palletizing, RBAC, multi-camera "
-            "rigs, and Fanuc CRX support.\n\nHeadline: palletizing is now generally "
-            "available after 6 months in beta. 8 customers already in production."
-        ),
+        "internal_announcement": ("## NyankoOS v1.3.0\n\nBig release — palletizing, RBAC, multi-camera rigs, and Fanuc CRX support.\n\nHeadline: palletizing is now generally available after 6 months in beta. 8 customers already in production."),
         "customer_notes": (
             "## NyankoOS v1.3.0 — What's New\n\n### New Features\n\n**Palletizing — "
             "Generally Available** — NyankoOS now supports full pallet building with "
@@ -278,11 +261,7 @@ _RELEASES = [
         "suggested_bump": "minor",
         "readiness_score": 90,
         "recommendation": "READY",
-        "internal_announcement": (
-            "## NyankoOS v1.5.0\n\nPerformance milestone release. Motion planning latency "
-            "down 25%, vision pipeline parallelized, Manhattan Associates WMS connector "
-            "ships.\n\nThis sets the foundation for v2.0 architecture changes."
-        ),
+        "internal_announcement": ("## NyankoOS v1.5.0\n\nPerformance milestone release. Motion planning latency down 25%, vision pipeline parallelized, Manhattan Associates WMS connector ships.\n\nThis sets the foundation for v2.0 architecture changes."),
         "customer_notes": (
             "## NyankoOS v1.5.0 — What's New\n\n### Performance Improvements\n\n**25% Faster "
             "Motion Planning** — Upgraded path planner reduces average planning time from "
@@ -299,11 +278,7 @@ _RELEASES = [
             "- Fixed vision pipeline hang on zero-byte USB camera frames\n- Fixed throughput "
             "metrics not accounting for regrasp attempts"
         ),
-        "marketing_notes": (
-            "## NyankoOS v1.5: 25% Faster Planning, Enterprise WMS Connectivity\n\nNyankoOS "
-            "1.5 delivers measurable throughput gains without hardware changes, and expands "
-            "enterprise connectivity with the Manhattan Active WM integration."
-        ),
+        "marketing_notes": ("## NyankoOS v1.5: 25% Faster Planning, Enterprise WMS Connectivity\n\nNyankoOS 1.5 delivers measurable throughput gains without hardware changes, and expands enterprise connectivity with the Manhattan Active WM integration."),
         "traceability": [
             {
                 "short_hash": "5c6d7e8",
@@ -417,10 +392,7 @@ _RELEASES = [
         "suggested_bump": "patch",
         "readiness_score": 95,
         "recommendation": "READY",
-        "internal_announcement": (
-            "## NyankoOS v2.0.1 — Hotfix\n\nFixes the two failing CI checks that shipped with "
-            "v2.0.0. Backward-compat endpoints restored. All customers should upgrade from v2.0.0."
-        ),
+        "internal_announcement": ("## NyankoOS v2.0.1 — Hotfix\n\nFixes the two failing CI checks that shipped with v2.0.0. Backward-compat endpoints restored. All customers should upgrade from v2.0.0."),
         "customer_notes": (
             "## NyankoOS v2.0.1 — Patch Release\n\n### Fixes\n\n- **Restored API v1 backward "
             "compatibility** — Two v1 endpoints (`/api/v1/tasks` and `/api/v1/status`) were "
@@ -430,10 +402,7 @@ _RELEASES = [
             "in v2.0.0. The deprecation warning is preserved."
         ),
         "marketing_notes": (
-            "## NyankoOS v2.0.1 — API Compatibility Restored\n\nNyankoOS v2.0.1 restores "
-            "full backward compatibility with the v1 API after a routing regression in "
-            "the v2.0.0 launch. Customers using v1 API endpoints can upgrade from v2.0.0 "
-            "immediately with no integration changes required."
+            "## NyankoOS v2.0.1 — API Compatibility Restored\n\nNyankoOS v2.0.1 restores full backward compatibility with the v1 API after a routing regression in the v2.0.0 launch. Customers using v1 API endpoints can upgrade from v2.0.0 immediately with no integration changes required."
         ),
         "traceability": [
             {
@@ -461,12 +430,7 @@ _RELEASES = [
         "suggested_bump": "minor",
         "readiness_score": 91,
         "recommendation": "READY",
-        "internal_announcement": (
-            "## NyankoOS v2.1.0\n\n"
-            "SAML SSO, OpenTelemetry tracing, Cognex camera support, and a new guided setup "
-            "wizard.\n\nFirst release to hit 99.2% pick accuracy in customer telemetry (up "
-            "from 97.8% in v2.0)."
-        ),
+        "internal_announcement": ("## NyankoOS v2.1.0\n\nSAML SSO, OpenTelemetry tracing, Cognex camera support, and a new guided setup wizard.\n\nFirst release to hit 99.2% pick accuracy in customer telemetry (up from 97.8% in v2.0)."),
         "customer_notes": (
             "## NyankoOS v2.1.0 — What's New\n\n### New Features\n\n**SAML 2.0 SSO** — Connect "
             "NyankoOS to your identity provider (Okta, Azure AD, Google Workspace) using SAML 2.0. "
@@ -484,10 +448,7 @@ _RELEASES = [
             "encoding\n- Fixed arm oscillation at end-effector deceleration on payloads >10kg"
         ),
         "marketing_notes": (
-            "## NyankoOS v2.1: Enterprise Identity, Observability, and 99.2% Pick Accuracy\n\n"
-            "NyankoOS 2.1 raises the bar on enterprise readiness with native SAML SSO, full "
-            "OpenTelemetry observability, and a pick accuracy improvement that translates "
-            "directly to fewer line stoppages."
+            "## NyankoOS v2.1: Enterprise Identity, Observability, and 99.2% Pick Accuracy\n\nNyankoOS 2.1 raises the bar on enterprise readiness with native SAML SSO, full OpenTelemetry observability, and a pick accuracy improvement that translates directly to fewer line stoppages."
         ),
         "traceability": [
             {
@@ -531,12 +492,7 @@ _RELEASES = [
         "suggested_bump": "minor",
         "readiness_score": 87,
         "recommendation": "READY",
-        "internal_announcement": (
-            "## NyankoOS v2.2.0\n\n"
-            "Stability & performance cycle. Variable conveyor speed, KUKA iiQKA support, "
-            "offline task queuing, and QA test suite expansion.\n\nKey metric: zero critical "
-            "bugs in the last 30-day soak test."
-        ),
+        "internal_announcement": ("## NyankoOS v2.2.0\n\nStability & performance cycle. Variable conveyor speed, KUKA iiQKA support, offline task queuing, and QA test suite expansion.\n\nKey metric: zero critical bugs in the last 30-day soak test."),
         "customer_notes": (
             "## NyankoOS v2.2.0 — What's New\n\n### New Features\n\n"
             "**Variable Conveyor Speed** — Conveyor belt speed can now be dynamically "
@@ -602,12 +558,7 @@ _RELEASES = [
         "suggested_bump": "patch",
         "readiness_score": 96,
         "recommendation": "READY",
-        "internal_announcement": (
-            "## NyankoOS v2.2.1 — Patch Release\n\n"
-            "Addresses QA regression failures found in v2.2.0 palletizing smoke suite "
-            "and load test results. Fixes thread pool exhaustion under high API concurrency."
-
-        ),
+        "internal_announcement": ("## NyankoOS v2.2.1 — Patch Release\n\nAddresses QA regression failures found in v2.2.0 palletizing smoke suite and load test results. Fixes thread pool exhaustion under high API concurrency."),
         "customer_notes": (
             "## NyankoOS v2.2.1 — Patch Release\n\n### Fixes\n\n"
             "- **Thread Pool Exhaustion** — Fixed a bug where sustained API load above 200 "
@@ -636,10 +587,7 @@ _RELEASES = [
             },
             {
                 "short_hash": "4d5e6f7",
-                "description": (
-                    "fix(palletizing): layer solver regression "
-                    "for high aspect-ratio SKUs",
-                ),
+                "description": ("fix(palletizing): layer solver regression for high aspect-ratio SKUs",),
                 "commit_type": "fix",
                 "is_breaking": False,
                 "pr_number": 49,
@@ -663,19 +611,12 @@ def seed_releases(db_path: str = config.DB_PATH) -> int:
     seeded = 0
     with sqlite3.connect(db_path) as conn:
         for r in _RELEASES:
-            exists = conn.execute(
-                "SELECT 1 FROM releases WHERE version = ?", (r["version"],)
-            ).fetchone()
+            exists = conn.execute("SELECT 1 FROM releases WHERE version = ?", (r["version"],)).fetchone()
             if exists:
                 # Patch marketing_notes if it was seeded as NULL but now has content
                 if r["marketing_notes"]:
                     conn.execute(
-                        (
-                            "UPDATE releases "
-                            "SET marketing_notes = ? "
-                            "WHERE version = ? "
-                            "AND marketing_notes IS NULL"
-                        ),
+                        ("UPDATE releases SET marketing_notes = ? WHERE version = ? AND marketing_notes IS NULL"),
                         (r["marketing_notes"], r["version"]),
                     )
                 continue

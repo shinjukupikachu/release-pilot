@@ -147,10 +147,7 @@ def cmd_list(client, channel: str, user: str, logger) -> None:
     lines = ["*All Releases*\n"]
     for r in releases:
         icon = badge.get(r["recommendation"], "⚪")
-        lines.append(
-            f"{icon} *{r['version']}*  —  {r['createdAt'][:10]}  —  "
-            f"score `{r['readinessScore']}/100`  —  bump `{r['suggestedBump']}`"
-        )
+        lines.append(f"{icon} *{r['version']}*  —  {r['createdAt'][:10]}  —  score `{r['readinessScore']}/100`  —  bump `{r['suggestedBump']}`")
     lines.append(f"\n_{len(releases)} release(s) total_")
 
     client.chat_postMessage(
@@ -172,11 +169,7 @@ def cmd_create(client, channel: str, user: str, version_arg: str, logger) -> Non
     # No version given — open an interactive thread
     resp = client.chat_postMessage(
         channel=channel,
-        text=(
-            f"📝 <@{user}> Starting release note creation.\n\n"
-            "What version would you like to release? (e.g. `v2.4.0`)\n"
-            "_Reply in this thread with the version string._"
-        ),
+        text=(f"📝 <@{user}> Starting release note creation.\n\nWhat version would you like to release? (e.g. `v2.4.0`)\n_Reply in this thread with the version string._"),
         mrkdwn=True,
     )
     thread_ts = resp["ts"]
@@ -259,21 +252,10 @@ def _post_check_result(client, channel: str, thread_ts: str, result) -> None:
 
     r: ReadinessCheckResult = result
     overall = "🟢 *READY TO SHIP*" if r.is_ready else "🟡 *HOLD — open Jira tickets remain*"
-    version_line = (
-        f"*Version:* {r.version}" if r.version else "*Source:* test data (latest commits)"
-    )
+    version_line = f"*Version:* {r.version}" if r.version else "*Source:* test data (latest commits)"
     from_line = f"  *Since:* {r.from_ref}" if r.from_ref else ""
 
-    header = (
-        f"━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-        f"🔍 *Release Readiness Check*\n"
-        f"━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-        f"{version_line}{chr(10) + from_line if from_line else ''}\n"
-        f"*Commits:* {r.total_commits}   "
-        f"*Jira tickets:* {len(r.all_jira)} "
-        f"({r.closed_count} ✅ closed / {r.open_count} ⚠️ open)\n\n"
-        f"{overall}"
-    )
+    header = f"━━━━━━━━━━━━━━━━━━━━━━━━━━━\n🔍 *Release Readiness Check*\n━━━━━━━━━━━━━━━━━━━━━━━━━━━\n{version_line}{chr(10) + from_line if from_line else ''}\n*Commits:* {r.total_commits}   *Jira tickets:* {len(r.all_jira)} ({r.closed_count} ✅ closed / {r.open_count} ⚠️ open)\n\n{overall}"
     client.chat_postMessage(channel=channel, thread_ts=thread_ts, text=header, mrkdwn=True)
 
     # One message per author group
@@ -289,9 +271,7 @@ def _post_check_result(client, channel: str, thread_ts: str, result) -> None:
             for ticket in grp.jira_tickets:
                 icon = "✅" if ticket.status.lower() in ("done", "closed", "resolved") else "⚠️"
                 type_tag = f"[{ticket.issue_type}] " if ticket.issue_type else ""
-                lines.append(
-                    f"   {icon} `{ticket.key}` {type_tag}*{ticket.summary}* — _{ticket.status}_"
-                )
+                lines.append(f"   {icon} `{ticket.key}` {type_tag}*{ticket.summary}* — _{ticket.status}_")
         else:
             lines.append("   _(no linked Jira tickets)_")
 
@@ -303,9 +283,7 @@ def _post_check_result(client, channel: str, thread_ts: str, result) -> None:
         if len(grp.commits) > 6:
             lines.append(f"   • _...and {len(grp.commits) - 6} more_")
 
-        client.chat_postMessage(
-            channel=channel, thread_ts=thread_ts, text="\n".join(lines), mrkdwn=True
-        )
+        client.chat_postMessage(channel=channel, thread_ts=thread_ts, text="\n".join(lines), mrkdwn=True)
 
     # Sign-off summary
     sign_off_lines = ["*✍️ Sign-off Required From:*"]
@@ -317,13 +295,8 @@ def _post_check_result(client, channel: str, thread_ts: str, result) -> None:
         sign_off_lines.append(f"  • {mgr_name}{handle}")
 
     if r.open_count > 0:
-        open_keys = [
-            t.key for t in r.all_jira if t.status.lower() not in ("done", "closed", "resolved")
-        ]
-        sign_off_lines.append(
-            f"\n⚠️ *{r.open_count} open ticket(s) blocking release:* "
-            f"{', '.join(f'`{k}`' for k in open_keys)}"
-        )
+        open_keys = [t.key for t in r.all_jira if t.status.lower() not in ("done", "closed", "resolved")]
+        sign_off_lines.append(f"\n⚠️ *{r.open_count} open ticket(s) blocking release:* {', '.join(f'`{k}`' for k in open_keys)}")
 
     client.chat_postMessage(
         channel=channel,
@@ -336,9 +309,7 @@ def _post_check_result(client, channel: str, thread_ts: str, result) -> None:
 # ── Release trigger (existing pipeline) ───────────────────────────────────────
 
 
-def _trigger_release(
-    client, channel: str, user: str, version: str, logger, thread_ts: str | None = None
-) -> None:
+def _trigger_release(client, channel: str, user: str, version: str, logger, thread_ts: str | None = None) -> None:
     if not version.startswith("v"):
         client.chat_postMessage(
             channel=channel,

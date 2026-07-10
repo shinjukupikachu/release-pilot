@@ -170,9 +170,7 @@ def _to_gql_result(r: ReleaseResult) -> ReleaseResultGQL:
 # ── Pipeline ─────────────────────────────────────────────────────────────
 
 
-async def run_release_pipeline(
-    job_id: str, version: str, from_ref: str, channel: str, thread_ts: str | None = None
-) -> None:
+async def run_release_pipeline(job_id: str, version: str, from_ref: str, channel: str, thread_ts: str | None = None) -> None:
     """Runs the full release pipeline via coordinator."""
     import logging
 
@@ -289,9 +287,7 @@ async def run_release_pipeline(
 @strawberry.type
 class Mutation:
     @strawberry.mutation
-    async def trigger_release(
-        self, input: ReleaseInputGQL, info: strawberry.types.Info
-    ) -> ReleaseJobGQL:
+    async def trigger_release(self, input: ReleaseInputGQL, info: strawberry.types.Info) -> ReleaseJobGQL:
         job_id = str(uuid.uuid4())
         jobs[job_id] = {"status": "PENDING", "result": None, "error": None}
         background_tasks: BackgroundTasks = info.context["background_tasks"]
@@ -381,22 +377,8 @@ def releases_index():
     for s in summaries:
         badge = {"READY": "🟢", "HOLD": "🟡", "BLOCKED": "🔴"}.get(s.recommendation, "⚪")
         pdf_exists = (pdf_dir / f"{s.version}.pdf").exists()
-        pdf_link = (
-            f'<a href="/releases/{s.version}.pdf" title="Download PDF">📄 PDF</a>'
-            if pdf_exists
-            else '<span style="color:#aaa">—</span>'
-        )
-        rows += (
-            f"<tr>"
-            f'<td><a href="/releases/{s.version}">{s.version}</a></td>'
-            f"<td>{s.created_at[:10]}</td>"
-            f"<td>{badge} {s.recommendation}</td>"
-            f"<td>{s.readiness_score}/100</td>"
-            f"<td>{s.suggested_bump}</td>"
-            f'<td><a href="/releases/{s.version}.md">⬇ .md</a></td>'
-            f"<td>{pdf_link}</td>"
-            f"</tr>\n"
-        )
+        pdf_link = f'<a href="/releases/{s.version}.pdf" title="Download PDF">📄 PDF</a>' if pdf_exists else '<span style="color:#aaa">—</span>'
+        rows += f'<tr><td><a href="/releases/{s.version}">{s.version}</a></td><td>{s.created_at[:10]}</td><td>{badge} {s.recommendation}</td><td>{s.readiness_score}/100</td><td>{s.suggested_bump}</td><td><a href="/releases/{s.version}.md">⬇ .md</a></td><td>{pdf_link}</td></tr>\n'
     return f"""<!DOCTYPE html>
 <html>
 <head>
@@ -431,14 +413,8 @@ def release_markdown(version: str):
     r = get_release(version)
     if not r:
         return PlainTextResponse("Release not found", status_code=404)
-    marketing_section = (
-        f"\n\n---\n\n## Marketing Notes\n\n{r.marketing_notes}" if r.marketing_notes else ""
-    )
-    internal_section = (
-        f"\n\n---\n\n## Internal Announcement\n\n{r.internal_announcement}"
-        if r.internal_announcement
-        else ""
-    )
+    marketing_section = f"\n\n---\n\n## Marketing Notes\n\n{r.marketing_notes}" if r.marketing_notes else ""
+    internal_section = f"\n\n---\n\n## Internal Announcement\n\n{r.internal_announcement}" if r.internal_announcement else ""
     return f"""# {r.version} Release Notes
 
 > **Readiness:** {r.readiness.recommendation} | **Score:** {r.readiness.score}/100 | **Bump:** {r.suggested_bump}
@@ -509,11 +485,7 @@ def release_detail(version: str):
         return HTMLResponse("<h2>Release not found</h2>", status_code=404)
 
     pdf_exists = (Path(release_config.PDF_DIR) / f"{version}.pdf").exists()
-    pdf_button = (
-        f'<a class="dl-btn" href="/releases/{version}.pdf">📄 Download PDF</a>'
-        if pdf_exists
-        else ""
-    )
+    pdf_button = f'<a class="dl-btn" href="/releases/{version}.pdf">📄 Download PDF</a>' if pdf_exists else ""
 
     customer_md = r.customer_notes or "_No customer notes generated._"
     marketing_md = r.marketing_notes or "_No marketing notes generated._"

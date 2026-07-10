@@ -34,7 +34,7 @@ def _llm_label() -> str:
 
 
 async def run(changeset: ChangeSet, progress_cb=None) -> ReleaseResult:
-    """Three-phase async pipeline. Phase 0: enrichment. Phase 1: classify + 
+    """Three-phase async pipeline. Phase 0: enrichment. Phase 1: classify +
        readiness. Phase 2: notes.
 
     TEST_DATA=1 mocks only Phase 0 (Jira + GitHub fixtures); Phases 1 & 2 still call the LLM.
@@ -67,11 +67,7 @@ async def run(changeset: ChangeSet, progress_cb=None) -> ReleaseResult:
     enriched = _merge_enrichment(changeset, jira_result, github_result)
 
     # ── Phase 1: classify + readiness (parallel) ──────────────────────────
-    _post(
-        f"🤖 *Phase 1* — Running 2 AI agents in parallel via *{llm}*\n"
-        f"   • *Classifier*: labelling {n} commits by audience & breaking-change status\n"
-        f"   • *Readiness*: scoring release risk from CI failures & open Jira tickets"
-    )
+    _post(f"🤖 *Phase 1* — Running 2 AI agents in parallel via *{llm}*\n   • *Classifier*: labelling {n} commits by audience & breaking-change status\n   • *Readiness*: scoring release risk from CI failures & open Jira tickets")
 
     classify_input = _build_classify_input(enriched)
     readiness_input = _build_readiness_input(enriched)
@@ -92,30 +88,15 @@ async def run(changeset: ChangeSet, progress_cb=None) -> ReleaseResult:
     n_breaking = len(enriched.breaking)
 
     # ── Phase 2: notes generation (parallel) ──────────────────────────────
-    marketing_label = (
-        f"{len(marketing_commits)} headline features"
-        if marketing_commits
-        else f"top {len(marketing_source)} customer highlights (no marketing-tier commits)"
-    )
+    marketing_label = f"{len(marketing_commits)} headline features" if marketing_commits else f"top {len(marketing_source)} customer highlights (no marketing-tier commits)"
     phase2_agents = [
-        (
-            f"• *Customer Notes*: drafting release notes for "
-            f"{len(customer_commits)} customer-facing commits"
-        ),
-        (
-            f"• *Marketing Notes*: writing copy for "
-            f"{marketing_label}"
-        ),
+        (f"• *Customer Notes*: drafting release notes for {len(customer_commits)} customer-facing commits"),
+        (f"• *Marketing Notes*: writing copy for {marketing_label}"),
     ]
     if enriched.breaking:
-        phase2_agents.append(
-            f"• *Breaking Change*: documenting migration steps for {n_breaking} breaking commit(s)"
-        )
+        phase2_agents.append(f"• *Breaking Change*: documenting migration steps for {n_breaking} breaking commit(s)")
 
-    _post(
-        f"🤖 *Phase 2* — Running {len(phase2_agents)} AI agents in parallel via *{llm}*\n"
-        + "\n".join(f"   {a}" for a in phase2_agents)
-    )
+    _post(f"🤖 *Phase 2* — Running {len(phase2_agents)} AI agents in parallel via *{llm}*\n" + "\n".join(f"   {a}" for a in phase2_agents))
 
     phase2_coros = [
         _run_agent(
@@ -128,9 +109,7 @@ async def run(changeset: ChangeSet, progress_cb=None) -> ReleaseResult:
         ),
     ]
     if enriched.breaking:
-        phase2_coros.append(
-            _run_agent(BREAKING_CHANGE_AGENT, _build_breaking_input(enriched.breaking))
-        )
+        phase2_coros.append(_run_agent(BREAKING_CHANGE_AGENT, _build_breaking_input(enriched.breaking)))
 
     phase2_results = await asyncio.gather(*phase2_coros)
     customer_result = phase2_results[0]
@@ -156,7 +135,7 @@ def _load_enrichment_from_test_data() -> tuple[dict, dict]:
     prs_raw = json.loads((_config.TEST_DATA_DIR / "github_prs.json").read_text())
     ci_raw = json.loads((_config.TEST_DATA_DIR / "github_check_runs.json").read_text())
 
-    # Normalise Jira: {key: {fields: {summary, status: {name}, issuetype: {name}, 
+    # Normalise Jira: {key: {fields: {summary, status: {name}, issuetype: {name},
     # priority: {name}}}}
     # → {key: {key, summary, status, issue_type, priority}}
     issues = {}
@@ -238,9 +217,7 @@ def _load_test_result(changeset: ChangeSet) -> ReleaseResult:
     version = changeset.version
 
     def _vsub(text: str | None) -> str | None:
-        return (
-            text.replace("v2.3.0", version).replace("2.3.0", version.lstrip("v")) if text else text
-        )
+        return text.replace("v2.3.0", version).replace("2.3.0", version.lstrip("v")) if text else text
 
     return ReleaseResult(
         version=version,
@@ -305,9 +282,7 @@ def _merge_enrichment(changeset: ChangeSet, jira_result: dict, github_result: di
 def _build_classify_input(changeset: ChangeSet) -> str:
     lines = [f"version: {changeset.version}", "commits:"]
     for c in changeset.commits:
-        jira_str = (
-            " ".join(f"[{t.key} {t.status} {t.issue_type}]" for t in c.jira_tickets) or "none"
-        )
+        jira_str = " ".join(f"[{t.key} {t.status} {t.issue_type}]" for t in c.jira_tickets) or "none"
         pr_str = f"#{c.pr_number}" if c.pr_number else "none"
         if c.ci_status:
             ci_str = f"{c.ci_status.passed}/{c.ci_status.total} passed"
@@ -317,9 +292,7 @@ def _build_classify_input(changeset: ChangeSet) -> str:
             ci_str = "no CI data"
         breaking_flag = " BREAKING" if c.is_breaking else ""
         scope_str = f"({c.scope})" if c.scope else ""
-        lines.append(
-            f"  - {c.short_hash} | {c.commit_type}{scope_str}{breaking_flag} | {c.clean_subject}"
-        )
+        lines.append(f"  - {c.short_hash} | {c.commit_type}{scope_str}{breaking_flag} | {c.clean_subject}")
         lines.append(f"    jira: {jira_str} | pr: {pr_str} | ci: {ci_str}")
     return "\n".join(lines)
 
@@ -343,10 +316,7 @@ def _build_notes_input(commits: list, version: str, audience: str) -> str:
                     "is_breaking": c.is_breaking,
                     "subject": c.clean_subject,
                     "breaking_note": c.breaking_note,
-                    "jira_tickets": [
-                        {"key": t.key, "summary": t.summary, "status": t.status}
-                        for t in c.jira_tickets
-                    ],
+                    "jira_tickets": [{"key": t.key, "summary": t.summary, "status": t.status} for t in c.jira_tickets],
                 }
                 for c in commits
             ],
@@ -401,17 +371,11 @@ async def _run_agent(agent_def: AgentDefinition, user_msg: str) -> dict:
     if not _config.KIMI_API_KEY and not _config.ANTHROPIC_API_KEY:
         raise RuntimeError("No LLM API key configured. Set KIMI_API_KEY or ANTHROPIC_API_KEY.")
 
-    coro = (
-        _run_agent_kimi(agent_def, user_msg)
-        if _config.KIMI_API_KEY
-        else _run_agent_anthropic(agent_def, user_msg)
-    )
+    coro = _run_agent_kimi(agent_def, user_msg) if _config.KIMI_API_KEY else _run_agent_anthropic(agent_def, user_msg)
     try:
         return await asyncio.wait_for(coro, timeout=60.0)
     except TimeoutError as err:
-        raise RuntimeError(
-            f"Agent '{agent_def.description}' timed out after 60s"
-        ) from err
+        raise RuntimeError(f"Agent '{agent_def.description}' timed out after 60s") from err
 
 
 async def _run_agent_kimi(agent_def: AgentDefinition, user_msg: str) -> dict:
