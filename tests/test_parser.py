@@ -1,11 +1,12 @@
 from __future__ import annotations
-import pytest
 from release_pilot.parser import parse_subject, parse_body, parse_commit, parse_commits
-from release_pilot.models import CommitInfo
+
 
 class TestParseSubject:
     def test_feat_with_scope(self):
-        t, scope, breaking, clean = parse_subject("feat(picking): add vision confirmation")
+        t, scope, breaking, clean = parse_subject(
+            "feat(picking): add vision confirmation"
+        )
         assert t == "feat"
         assert scope == "picking"
         assert breaking is False
@@ -37,6 +38,7 @@ class TestParseSubject:
         t, scope, breaking, clean = parse_subject("docs(api): update REST reference")
         assert t == "docs"
 
+
 class TestParseBody:
     def test_extracts_jira_keys(self):
         note, keys = parse_body("Fixes bug.\n\nNYANKO-456")
@@ -55,6 +57,7 @@ class TestParseBody:
         note, keys = parse_body("Simple fix, no ticket.")
         assert keys == []
         assert note is None
+
 
 class TestParseCommit:
     def test_jira_key_dedup_across_subject_and_body(self, sample_commit_infos):

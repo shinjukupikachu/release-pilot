@@ -4,6 +4,7 @@ from release_pilot.models import ParsedCommit, ChangeSet
 _MINOR_TYPES = {"feat"}
 _PATCH_TYPES = {"fix", "perf"}
 
+
 def calculate_bump(commits: list[ParsedCommit]) -> str:
     """Returns 'major', 'minor', 'patch', or 'none'."""
     if any(c.is_breaking for c in commits):
@@ -14,7 +15,10 @@ def calculate_bump(commits: list[ParsedCommit]) -> str:
         return "patch"
     return "none"
 
-def build_changeset(version: str, from_ref: str, commits: list[ParsedCommit]) -> ChangeSet:
+
+def build_changeset(
+    version: str, from_ref: str, commits: list[ParsedCommit]
+) -> ChangeSet:
     return ChangeSet(
         version=version,
         from_ref=from_ref,

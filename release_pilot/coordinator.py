@@ -1,9 +1,13 @@
 from __future__ import annotations
 import asyncio
 import json
-import re
 from release_pilot.models import (
-    ChangeSet, ReleaseResult, ReadinessReport, TraceabilityRow, JiraTicket, CIStatus
+    ChangeSet,
+    ReleaseResult,
+    ReadinessReport,
+    TraceabilityRow,
+    JiraTicket,
+    CIStatus,
 )
 from release_pilot.agents.jira_enrichment_agent import JIRA_ENRICHMENT_AGENT
 from release_pilot.agents.github_enrichment_agent import GITHUB_ENRICHMENT_AGENT
@@ -33,6 +37,7 @@ async def run(changeset: ChangeSet, progress_cb=None) -> ReleaseResult:
     TEST_DATA=1 mocks only Phase 0 (Jira + GitHub fixtures); Phases 1 & 2 still call the LLM.
     progress_cb(msg): optional callable that posts status updates to Slack.
     """
+
     def _post(msg: str):
         if progress_cb:
             try:
@@ -45,10 +50,14 @@ async def run(changeset: ChangeSet, progress_cb=None) -> ReleaseResult:
 
     # ── Phase 0: enrichment ───────────────────────────────────────────────
     if _config.TEST_DATA:
-        _post(f"⚙️ *Phase 0* — Loading {n} commits + Jira & GitHub data from test fixtures")
+        _post(
+            f"⚙️ *Phase 0* — Loading {n} commits + Jira & GitHub data from test fixtures"
+        )
         jira_result, github_result = _load_enrichment_from_test_data()
     else:
-        _post(f"⚙️ *Phase 0* — Fetching Jira tickets & GitHub PR/CI data for {n} commits via MCP")
+        _post(
+            f"⚙️ *Phase 0* — Fetching Jira tickets & GitHub PR/CI data for {n} commits via MCP"
+        )
         all_jira_keys = list({k for c in changeset.commits for k in c.jira_keys})
         all_shas = [c.hash for c in changeset.commits]
         jira_result, github_result = await asyncio.gather(
@@ -73,11 +82,15 @@ async def run(changeset: ChangeSet, progress_cb=None) -> ReleaseResult:
         _run_agent(READINESS_AGENT, readiness_input),
     )
 
-    audience_map = {c["short_hash"]: c["audience"] for c in classify_result.get("commits", [])}
+    audience_map = {
+        c["short_hash"]: c["audience"] for c in classify_result.get("commits", [])
+    }
     for commit in enriched.commits:
         commit.audience = audience_map.get(commit.short_hash, "internal")
 
-    customer_commits = [c for c in enriched.commits if c.audience in ("customer", "marketing")]
+    customer_commits = [
+        c for c in enriched.commits if c.audience in ("customer", "marketing")
+    ]
     marketing_commits = [c for c in enriched.commits if c.audience == "marketing"]
     # Fall back to top customer commits when no marketing-tier commits were classified
     marketing_source = marketing_commits if marketing_commits else customer_commits[:5]
@@ -94,7 +107,9 @@ async def run(changeset: ChangeSet, progress_cb=None) -> ReleaseResult:
         f"• *Marketing Notes*: writing copy for {marketing_label}",
     ]
     if enriched.breaking:
-        phase2_agents.append(f"• *Breaking Change*: documenting migration steps for {n_breaking} breaking commit(s)")
+        phase2_agents.append(
+            f"• *Breaking Change*: documenting migration steps for {n_breaking} breaking commit(s)"
+        )
 
     _post(
         f"🤖 *Phase 2* — Running {len(phase2_agents)} AI agents in parallel via *{llm}*\n"
@@ -102,11 +117,19 @@ async def run(changeset: ChangeSet, progress_cb=None) -> ReleaseResult:
     )
 
     phase2_coros = [
-        _run_agent(CUSTOMER_NOTES_AGENT, _build_notes_input(customer_commits, enriched.version, "customer")),
-        _run_agent(MARKETING_NOTES_AGENT, _build_notes_input(marketing_source, enriched.version, "marketing")),
+        _run_agent(
+            CUSTOMER_NOTES_AGENT,
+            _build_notes_input(customer_commits, enriched.version, "customer"),
+        ),
+        _run_agent(
+            MARKETING_NOTES_AGENT,
+            _build_notes_input(marketing_source, enriched.version, "marketing"),
+        ),
     ]
     if enriched.breaking:
-        phase2_coros.append(_run_agent(BREAKING_CHANGE_AGENT, _build_breaking_input(enriched.breaking)))
+        phase2_coros.append(
+            _run_agent(BREAKING_CHANGE_AGENT, _build_breaking_input(enriched.breaking))
+        )
 
     phase2_results = await asyncio.gather(*phase2_coros)
     customer_result = phase2_results[0]
@@ -116,8 +139,14 @@ async def run(changeset: ChangeSet, progress_cb=None) -> ReleaseResult:
     _post("✅ *All agents complete* — compiling results...")
 
     # ── Build final result ─────────────────────────────────────────────────
-    return _build_release_result(enriched, classify_result, readiness_result,
-                                  customer_result, marketing_result, breaking_result)
+    return _build_release_result(
+        enriched,
+        classify_result,
+        readiness_result,
+        customer_result,
+        marketing_result,
+        breaking_result,
+    )
 
 
 def _load_enrichment_from_test_data() -> tuple[dict, dict]:
@@ -159,7 +188,9 @@ def _load_test_result(changeset: ChangeSet) -> ReleaseResult:
     readiness_data = data["readiness"]
     jira_data = json.loads((_config.TEST_DATA_DIR / "jira_issues.json").read_text())
     github_prs = json.loads((_config.TEST_DATA_DIR / "github_prs.json").read_text())
-    github_ci = json.loads((_config.TEST_DATA_DIR / "github_check_runs.json").read_text())
+    github_ci = json.loads(
+        (_config.TEST_DATA_DIR / "github_check_runs.json").read_text()
+    )
 
     audience_map = {c["short_hash"]: c["audience"] for c in classify["commits"]}
     traceability = []
@@ -169,36 +200,49 @@ def _load_test_result(changeset: ChangeSet) -> ReleaseResult:
         for key in commit.jira_keys:
             issue = jira_data.get("issues", {}).get(key, {})
             if issue and "error" not in issue:
-                jira_tickets.append(JiraTicket(
-                    key=issue.get("key", key),
-                    summary=issue.get("summary", ""),
-                    status=issue.get("status", "Unknown"),
-                    issue_type=issue.get("issue_type", "Unknown"),
-                    priority=issue.get("priority"),
-                ))
+                jira_tickets.append(
+                    JiraTicket(
+                        key=issue.get("key", key),
+                        summary=issue.get("summary", ""),
+                        status=issue.get("status", "Unknown"),
+                        issue_type=issue.get("issue_type", "Unknown"),
+                        priority=issue.get("priority"),
+                    )
+                )
         pr = github_prs.get("prs", {}).get(commit.hash, {})
         ci = github_ci.get("check_runs", {}).get(commit.hash, {})
-        ci_status = CIStatus(
-            total=ci.get("total", 0),
-            passed=ci.get("passed", 0),
-            failed=ci.get("failed", 0),
-            failed_names=ci.get("failed_names", []),
-        ) if ci.get("total", 0) > 0 else None
-        traceability.append(TraceabilityRow(
-            short_hash=commit.short_hash,
-            description=commit.clean_subject,
-            commit_type=commit.commit_type,
-            is_breaking=commit.is_breaking,
-            jira_tickets=jira_tickets,
-            pr_number=pr.get("number") if pr else None,
-            pr_url=pr.get("url") if pr else None,
-            ci_status=ci_status,
-        ))
+        ci_status = (
+            CIStatus(
+                total=ci.get("total", 0),
+                passed=ci.get("passed", 0),
+                failed=ci.get("failed", 0),
+                failed_names=ci.get("failed_names", []),
+            )
+            if ci.get("total", 0) > 0
+            else None
+        )
+        traceability.append(
+            TraceabilityRow(
+                short_hash=commit.short_hash,
+                description=commit.clean_subject,
+                commit_type=commit.commit_type,
+                is_breaking=commit.is_breaking,
+                jira_tickets=jira_tickets,
+                pr_number=pr.get("number") if pr else None,
+                pr_url=pr.get("url") if pr else None,
+                ci_status=ci_status,
+            )
+        )
 
     # Substitute the hardcoded template version with the actual requested version
     version = changeset.version
+
     def _vsub(text: str | None) -> str | None:
-        return text.replace("v2.3.0", version).replace("2.3.0", version.lstrip("v")) if text else text
+        return (
+            text.replace("v2.3.0", version).replace("2.3.0", version.lstrip("v"))
+            if text
+            else text
+        )
 
     return ReleaseResult(
         version=version,
@@ -217,7 +261,9 @@ def _load_test_result(changeset: ChangeSet) -> ReleaseResult:
     )
 
 
-def _merge_enrichment(changeset: ChangeSet, jira_result: dict, github_result: dict) -> ChangeSet:
+def _merge_enrichment(
+    changeset: ChangeSet, jira_result: dict, github_result: dict
+) -> ChangeSet:
     """Attach Jira tickets and GitHub PR/CI data to each commit."""
     jira_issues = jira_result.get("issues", {})
     prs = github_result.get("prs", {})
@@ -229,13 +275,15 @@ def _merge_enrichment(changeset: ChangeSet, jira_result: dict, github_result: di
         for key in commit.jira_keys:
             issue = jira_issues.get(key, {})
             if issue and "error" not in issue:
-                commit.jira_tickets.append(JiraTicket(
-                    key=issue.get("key", key),
-                    summary=issue.get("summary", ""),
-                    status=issue.get("status", "Unknown"),
-                    issue_type=issue.get("issue_type", "Unknown"),
-                    priority=issue.get("priority"),
-                ))
+                commit.jira_tickets.append(
+                    JiraTicket(
+                        key=issue.get("key", key),
+                        summary=issue.get("summary", ""),
+                        status=issue.get("status", "Unknown"),
+                        issue_type=issue.get("issue_type", "Unknown"),
+                        priority=issue.get("priority"),
+                    )
+                )
 
         # GitHub PR
         pr = prs.get(commit.hash, {})
@@ -261,7 +309,10 @@ def _merge_enrichment(changeset: ChangeSet, jira_result: dict, github_result: di
 def _build_classify_input(changeset: ChangeSet) -> str:
     lines = [f"version: {changeset.version}", "commits:"]
     for c in changeset.commits:
-        jira_str = " ".join(f"[{t.key} {t.status} {t.issue_type}]" for t in c.jira_tickets) or "none"
+        jira_str = (
+            " ".join(f"[{t.key} {t.status} {t.issue_type}]" for t in c.jira_tickets)
+            or "none"
+        )
         pr_str = f"#{c.pr_number}" if c.pr_number else "none"
         if c.ci_status:
             ci_str = f"{c.ci_status.passed}/{c.ci_status.total} passed"
@@ -285,36 +336,43 @@ def _build_readiness_input(changeset: ChangeSet) -> str:
 def _build_notes_input(commits: list, version: str, audience: str) -> str:
     if not commits:
         return json.dumps({"version": version, "commits": [], "audience": audience})
-    return json.dumps({
-        "version": version,
-        "audience": audience,
-        "commits": [
-            {
-                "short_hash": c.short_hash,
-                "type": c.commit_type,
-                "scope": c.scope,
-                "is_breaking": c.is_breaking,
-                "subject": c.clean_subject,
-                "breaking_note": c.breaking_note,
-                "jira_tickets": [{"key": t.key, "summary": t.summary, "status": t.status} for t in c.jira_tickets],
-            }
-            for c in commits
-        ]
-    })
+    return json.dumps(
+        {
+            "version": version,
+            "audience": audience,
+            "commits": [
+                {
+                    "short_hash": c.short_hash,
+                    "type": c.commit_type,
+                    "scope": c.scope,
+                    "is_breaking": c.is_breaking,
+                    "subject": c.clean_subject,
+                    "breaking_note": c.breaking_note,
+                    "jira_tickets": [
+                        {"key": t.key, "summary": t.summary, "status": t.status}
+                        for t in c.jira_tickets
+                    ],
+                }
+                for c in commits
+            ],
+        }
+    )
 
 
 def _build_breaking_input(breaking_commits: list) -> str:
-    return json.dumps({
-        "breaking_commits": [
-            {
-                "short_hash": c.short_hash,
-                "subject": c.clean_subject,
-                "breaking_note": c.breaking_note,
-                "scope": c.scope,
-            }
-            for c in breaking_commits
-        ]
-    })
+    return json.dumps(
+        {
+            "breaking_commits": [
+                {
+                    "short_hash": c.short_hash,
+                    "subject": c.clean_subject,
+                    "breaking_note": c.breaking_note,
+                    "scope": c.scope,
+                }
+                for c in breaking_commits
+            ]
+        }
+    )
 
 
 def _extract_json(text: str) -> dict:
@@ -346,9 +404,15 @@ async def _run_agent(agent_def: AgentDefinition, user_msg: str) -> dict:
         return _stub_response(agent_def.description)
 
     if not _config.KIMI_API_KEY and not _config.ANTHROPIC_API_KEY:
-        raise RuntimeError("No LLM API key configured. Set KIMI_API_KEY or ANTHROPIC_API_KEY.")
+        raise RuntimeError(
+            "No LLM API key configured. Set KIMI_API_KEY or ANTHROPIC_API_KEY."
+        )
 
-    coro = _run_agent_kimi(agent_def, user_msg) if _config.KIMI_API_KEY else _run_agent_anthropic(agent_def, user_msg)
+    coro = (
+        _run_agent_kimi(agent_def, user_msg)
+        if _config.KIMI_API_KEY
+        else _run_agent_anthropic(agent_def, user_msg)
+    )
     try:
         return await asyncio.wait_for(coro, timeout=60.0)
     except asyncio.TimeoutError:
@@ -359,6 +423,7 @@ async def _run_agent_kimi(agent_def: AgentDefinition, user_msg: str) -> dict:
     import logging
     import httpx
     from openai import AsyncOpenAI
+
     log = logging.getLogger(__name__)
     log.info(f"kimi call start: {agent_def.description[:60]}")
     client = AsyncOpenAI(
@@ -394,18 +459,30 @@ async def _run_agent_anthropic(agent_def: AgentDefinition, user_msg: str) -> dic
 def _stub_response(description: str) -> dict:
     """Fallback stub when SDK not installed — returns plausible empty structure."""
     if "classifier" in description.lower() or "classify" in description.lower():
-        return {"commits": [], "internal_announcement": "[SDK not installed — stub output]"}
+        return {
+            "commits": [],
+            "internal_announcement": "[SDK not installed — stub output]",
+        }
     if "readiness" in description.lower():
-        return {"score": 75, "recommendation": "HOLD", "rationale": "SDK not installed",
-                "risk_factors": ["claude_agent_sdk not installed"], "rollback_plan": "N/A",
-                "per_commit_risk": []}
+        return {
+            "score": 75,
+            "recommendation": "HOLD",
+            "rationale": "SDK not installed",
+            "risk_factors": ["claude_agent_sdk not installed"],
+            "rollback_plan": "N/A",
+            "per_commit_risk": [],
+        }
     if "customer" in description.lower():
         return {"customer_notes": "[SDK not installed — stub output]"}
     if "marketing" in description.lower():
         return {"marketing_notes": None}
     if "breaking" in description.lower():
-        return {"affected_components": [], "severity": "UNKNOWN", "migration_steps": [],
-                "customer_action_required": False}
+        return {
+            "affected_components": [],
+            "severity": "UNKNOWN",
+            "migration_steps": [],
+            "customer_action_required": False,
+        }
     if "jira" in description.lower():
         return {"issues": {}}
     if "github" in description.lower():
@@ -432,16 +509,18 @@ def _build_release_result(
     traceability = []
     for commit in enriched.commits:
         ci = commit.ci_status
-        traceability.append(TraceabilityRow(
-            short_hash=commit.short_hash,
-            description=commit.clean_subject,
-            commit_type=commit.commit_type,
-            is_breaking=commit.is_breaking,
-            jira_tickets=commit.jira_tickets,
-            pr_number=commit.pr_number,
-            pr_url=commit.pr_url,
-            ci_status=ci,
-        ))
+        traceability.append(
+            TraceabilityRow(
+                short_hash=commit.short_hash,
+                description=commit.clean_subject,
+                commit_type=commit.commit_type,
+                is_breaking=commit.is_breaking,
+                jira_tickets=commit.jira_tickets,
+                pr_number=commit.pr_number,
+                pr_url=commit.pr_url,
+                ci_status=ci,
+            )
+        )
 
     return ReleaseResult(
         version=enriched.version,

@@ -3,10 +3,11 @@ import re
 from release_pilot.models import CommitInfo, ParsedCommit
 
 # Conventional commit subject: type(scope)!: description
-_SUBJECT_RE = re.compile(r'^(\w+)(\([\w/.-]+\))?(!)?:\s*(.+)')
+_SUBJECT_RE = re.compile(r"^(\w+)(\([\w/.-]+\))?(!)?:\s*(.+)")
 # Jira key pattern
-_JIRA_RE = re.compile(r'[A-Z]+-\d+')
-_BREAKING_RE = re.compile(r'^BREAKING CHANGE:\s*(.+)', re.MULTILINE)
+_JIRA_RE = re.compile(r"[A-Z]+-\d+")
+_BREAKING_RE = re.compile(r"^BREAKING CHANGE:\s*(.+)", re.MULTILINE)
+
 
 def parse_subject(subject: str) -> tuple[str, str | None, bool, str]:
     """Returns (commit_type, scope, is_breaking, clean_subject)."""
@@ -19,17 +20,23 @@ def parse_subject(subject: str) -> tuple[str, str | None, bool, str]:
     clean_subject = m.group(4)
     return commit_type, scope, is_breaking, clean_subject
 
+
 def parse_body(body: str) -> tuple[str | None, list[str]]:
     """Returns (breaking_note, jira_keys) from commit body."""
     breaking_note: str | None = None
     m = _BREAKING_RE.search(body)
     if m:
         breaking_note = m.group(1).strip()
-    jira_keys = list(dict.fromkeys(_JIRA_RE.findall(body)))  # deduplicated, order-preserving
+    jira_keys = list(
+        dict.fromkeys(_JIRA_RE.findall(body))
+    )  # deduplicated, order-preserving
     return breaking_note, jira_keys
 
+
 def parse_commit(commit: CommitInfo) -> ParsedCommit:
-    commit_type, scope, is_breaking_subject, clean_subject = parse_subject(commit.subject)
+    commit_type, scope, is_breaking_subject, clean_subject = parse_subject(
+        commit.subject
+    )
     breaking_note, jira_keys = parse_body(commit.body)
     is_breaking = is_breaking_subject or breaking_note is not None
     # Also extract Jira keys from subject
@@ -49,6 +56,7 @@ def parse_commit(commit: CommitInfo) -> ParsedCommit:
         clean_subject=clean_subject,
         jira_keys=all_keys,
     )
+
 
 def parse_commits(commits: list[CommitInfo]) -> list[ParsedCommit]:
     return [parse_commit(c) for c in commits]

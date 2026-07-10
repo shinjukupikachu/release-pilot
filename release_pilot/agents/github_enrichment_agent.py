@@ -34,6 +34,9 @@ Return ONLY the JSON object. No explanations.
 GITHUB_ENRICHMENT_AGENT = AgentDefinition(
     description="Fetch GitHub PR and CI check results for all commit SHAs in the release",
     prompt=GITHUB_ENRICHMENT_SYSTEM,
-    tools=["mcp__release-pilot-mock__get_github_pr", "mcp__release-pilot-mock__get_check_runs"],
+    tools=[
+        "mcp__release-pilot-mock__get_github_pr",
+        "mcp__release-pilot-mock__get_check_runs",
+    ],
     model="sonnet",
 )

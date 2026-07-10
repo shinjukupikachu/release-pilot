@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Release Pilot Slackbot — /release slash command router via Socket Mode."""
+
 from __future__ import annotations
 import os
 import sys
 
 try:
     from dotenv import load_dotenv
+
     load_dotenv()
 except ImportError:
     pass
@@ -20,10 +22,14 @@ SERVICE_URL = os.environ.get("SERVICE_URL", "http://localhost:30080/graphql")
 SERVICE_BASE_URL = SERVICE_URL.rsplit("/graphql", 1)[0]
 
 if not SLACK_BOT_TOKEN:
-    print("ERROR: SLACK_BOT_TOKEN not set. Copy .env.example to .env and fill in your tokens.")
+    print(
+        "ERROR: SLACK_BOT_TOKEN not set. Copy .env.example to .env and fill in your tokens."
+    )
     sys.exit(1)
 if not SLACK_APP_TOKEN:
-    print("ERROR: SLACK_APP_TOKEN not set. Copy .env.example to .env and fill in your tokens.")
+    print(
+        "ERROR: SLACK_APP_TOKEN not set. Copy .env.example to .env and fill in your tokens."
+    )
     sys.exit(1)
 
 app = App(token=SLACK_BOT_TOKEN)
@@ -118,17 +124,26 @@ def cmd_list(client, channel: str, user: str, logger) -> None:
         releases = data["data"]["releaseHistory"]
     except httpx.ConnectError:
         client.chat_postMessage(
-            channel=channel, thread_ts=thread_ts,
+            channel=channel,
+            thread_ts=thread_ts,
             text=f"❌ Could not reach release service at `{SERVICE_URL}`. Is it running?",
         )
         return
     except Exception as e:
         logger.error(f"list releases failed: {e}")
-        client.chat_postMessage(channel=channel, thread_ts=thread_ts, text=f"❌ Failed to fetch releases: {e}")
+        client.chat_postMessage(
+            channel=channel,
+            thread_ts=thread_ts,
+            text=f"❌ Failed to fetch releases: {e}",
+        )
         return
 
     if not releases:
-        client.chat_postMessage(channel=channel, thread_ts=thread_ts, text="No releases found in the database yet.")
+        client.chat_postMessage(
+            channel=channel,
+            thread_ts=thread_ts,
+            text="No releases found in the database yet.",
+        )
         return
 
     badge = {"READY": "🟢", "HOLD": "🟡", "BLOCKED": "🔴"}
@@ -150,6 +165,7 @@ def cmd_list(client, channel: str, user: str, logger) -> None:
 
 
 # ── Create ────────────────────────────────────────────────────────────────────
+
 
 def cmd_create(client, channel: str, user: str, version_arg: str, logger) -> None:
     if version_arg:
@@ -214,6 +230,7 @@ def handle_thread_reply(event, client, logger):
 
 # ── Check ─────────────────────────────────────────────────────────────────────
 
+
 def cmd_check(client, channel: str, user: str, version_arg: str, logger) -> None:
     from release_pilot.check import run_check
 
@@ -244,8 +261,14 @@ def _post_check_result(client, channel: str, thread_ts: str, result) -> None:
     from release_pilot.check import ReadinessCheckResult
 
     r: ReadinessCheckResult = result
-    overall = "🟢 *READY TO SHIP*" if r.is_ready else "🟡 *HOLD — open Jira tickets remain*"
-    version_line = f"*Version:* {r.version}" if r.version else "*Source:* test data (latest commits)"
+    overall = (
+        "🟢 *READY TO SHIP*" if r.is_ready else "🟡 *HOLD — open Jira tickets remain*"
+    )
+    version_line = (
+        f"*Version:* {r.version}"
+        if r.version
+        else "*Source:* test data (latest commits)"
+    )
     from_line = f"  *Since:* {r.from_ref}" if r.from_ref else ""
 
     header = (
@@ -258,7 +281,9 @@ def _post_check_result(client, channel: str, thread_ts: str, result) -> None:
         f"({r.closed_count} ✅ closed / {r.open_count} ⚠️ open)\n\n"
         f"{overall}"
     )
-    client.chat_postMessage(channel=channel, thread_ts=thread_ts, text=header, mrkdwn=True)
+    client.chat_postMessage(
+        channel=channel, thread_ts=thread_ts, text=header, mrkdwn=True
+    )
 
     # One message per author group
     for grp in r.author_groups:
@@ -271,7 +296,11 @@ def _post_check_result(client, channel: str, thread_ts: str, result) -> None:
         if grp.jira_tickets:
             lines.append("   Jira tickets:")
             for ticket in grp.jira_tickets:
-                icon = "✅" if ticket.status.lower() in ("done", "closed", "resolved") else "⚠️"
+                icon = (
+                    "✅"
+                    if ticket.status.lower() in ("done", "closed", "resolved")
+                    else "⚠️"
+                )
                 type_tag = f"[{ticket.issue_type}] " if ticket.issue_type else ""
                 lines.append(
                     f"   {icon} `{ticket.key}` {type_tag}*{ticket.summary}* — _{ticket.status}_"
@@ -295,24 +324,34 @@ def _post_check_result(client, channel: str, thread_ts: str, result) -> None:
     sign_off_lines = ["*✍️ Sign-off Required From:*"]
     for mgr_name in r.sign_off_managers:
         from release_pilot import org as orgchart
+
         mgr = orgchart.lookup(mgr_name)
         handle = f" (@{mgr.slack_handle})" if mgr and mgr.slack_handle else ""
         sign_off_lines.append(f"  • {mgr_name}{handle}")
 
     if r.open_count > 0:
-        open_keys = [t.key for t in r.all_jira if t.status.lower() not in ("done", "closed", "resolved")]
-        sign_off_lines.append(f"\n⚠️ *{r.open_count} open ticket(s) blocking release:* {', '.join(f'`{k}`' for k in open_keys)}")
+        open_keys = [
+            t.key
+            for t in r.all_jira
+            if t.status.lower() not in ("done", "closed", "resolved")
+        ]
+        sign_off_lines.append(
+            f"\n⚠️ *{r.open_count} open ticket(s) blocking release:* {', '.join(f'`{k}`' for k in open_keys)}"
+        )
 
     client.chat_postMessage(
-        channel=channel, thread_ts=thread_ts, text="\n".join(sign_off_lines), mrkdwn=True
+        channel=channel,
+        thread_ts=thread_ts,
+        text="\n".join(sign_off_lines),
+        mrkdwn=True,
     )
 
 
 # ── Release trigger (existing pipeline) ───────────────────────────────────────
 
+
 def _trigger_release(
-    client, channel: str, user: str, version: str, logger,
-    thread_ts: str | None = None
+    client, channel: str, user: str, version: str, logger, thread_ts: str | None = None
 ) -> None:
     if not version.startswith("v"):
         client.chat_postMessage(
@@ -372,14 +411,15 @@ def _trigger_release(
 
 # ── PDF button action handlers ────────────────────────────────────────────────
 
+
 @app.action("generate_pdf")
 def handle_generate_pdf(ack, body, client, logger):
     ack()
     import json as _json
+
     payload = _json.loads(body["actions"][0]["value"])
     version = payload["version"]
     channel = payload["channel"]
-    thread_ts = payload["thread_ts"]
     msg_ts = body["message"]["ts"]
 
     # Update button message to "Generating..."
@@ -388,7 +428,13 @@ def handle_generate_pdf(ack, body, client, logger):
         ts=msg_ts,
         text=f"⏳ Generating PDF for *{version}*...",
         blocks=[
-            {"type": "section", "text": {"type": "mrkdwn", "text": f"⏳ Generating PDF for *{version}*..."}},
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"⏳ Generating PDF for *{version}*...",
+                },
+            },
         ],
     )
 
@@ -409,7 +455,10 @@ def handle_generate_pdf(ack, body, client, logger):
             blocks=[
                 {
                     "type": "section",
-                    "text": {"type": "mrkdwn", "text": f"📄 *{version}* release notes PDF is ready!"},
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": f"📄 *{version}* release notes PDF is ready!",
+                    },
                 },
                 {
                     "type": "actions",
@@ -437,7 +486,13 @@ def handle_generate_pdf(ack, body, client, logger):
             ts=msg_ts,
             text=f"❌ PDF generation failed for `{version}`: {e}",
             blocks=[
-                {"type": "section", "text": {"type": "mrkdwn", "text": f"❌ PDF generation failed: `{e}`"}},
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": f"❌ PDF generation failed: `{e}`",
+                    },
+                },
             ],
         )
 
@@ -450,7 +505,13 @@ def handle_skip_pdf(ack, body, client):
         ts=body["message"]["ts"],
         text="PDF generation skipped.",
         blocks=[
-            {"type": "section", "text": {"type": "mrkdwn", "text": "📄 PDF skipped — you can always view the release on the web server."}},
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": "📄 PDF skipped — you can always view the release on the web server.",
+                },
+            },
         ],
     )
 
@@ -466,6 +527,7 @@ def handle_open_web(ack):
 
 
 # ── Main command handler ───────────────────────────────────────────────────────
+
 
 @app.command("/release")
 def handle_release(ack, command, client, logger):

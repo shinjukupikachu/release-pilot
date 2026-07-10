@@ -1,21 +1,21 @@
 """Generate PDF release notes using fpdf2."""
+
 from __future__ import annotations
 import re
-import unicodedata
 from pathlib import Path
 from fpdf import FPDF
 
 _UNICODE_MAP = {
-    "—": "-",    # em dash
-    "–": "-",    # en dash
-    "→": "->",   # right arrow
-    "←": "<-",   # left arrow
-    "‘": "'",    # left single quote
-    "’": "'",    # right single quote
-    "“": '"',    # left double quote
-    "”": '"',    # right double quote
+    "—": "-",  # em dash
+    "–": "-",  # en dash
+    "→": "->",  # right arrow
+    "←": "<-",  # left arrow
+    "‘": "'",  # left single quote
+    "’": "'",  # right single quote
+    "“": '"',  # left double quote
+    "”": '"',  # right double quote
     "…": "...",  # ellipsis
-    "•": "*",    # bullet
+    "•": "*",  # bullet
     "✓": "[ok]",
     "✔": "[ok]",
     "✗": "[x]",
@@ -23,18 +23,18 @@ _UNICODE_MAP = {
     # emoji replacements used in internal announcement
     "✨": "[Feature]",  # ✨
     "\U0001f41b": "[Bug]",  # 🐛
-    "⚡": "[Perf]",     # ⚡
+    "⚡": "[Perf]",  # ⚡
     "\U0001f512": "[Sec]",  # 🔒
     "⚠️": "[!]",  # ⚠️ (combined)
-    "⚠": "[!]",        # ⚠
-    "️": "",           # variation selector
-    "\U0001f4cb": "",       # 📋
-    "\U0001f4e3": "",       # 📢
-    "\U0001f4e4": "",       # 📤
-    "✅": "[ok]",       # ✅
-    "❌": "[x]",        # ❌
-    "⚙️": "",     # ⚙️
-    "⚙": "",           # ⚙
+    "⚠": "[!]",  # ⚠
+    "️": "",  # variation selector
+    "\U0001f4cb": "",  # 📋
+    "\U0001f4e3": "",  # 📢
+    "\U0001f4e4": "",  # 📤
+    "✅": "[ok]",  # ✅
+    "❌": "[x]",  # ❌
+    "⚙️": "",  # ⚙️
+    "⚙": "",  # ⚙
 }
 
 
@@ -48,14 +48,15 @@ def _sanitize(text: str) -> str:
 
 # ── Markdown → HTML (subset fpdf2 understands) ────────────────────────────────
 
+
 def _inline(text: str) -> str:
     """Convert inline markdown to HTML: bold, italic, code, links."""
-    text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', text)
-    text = re.sub(r'\*(.*?)\*', r'<i>\1</i>', text)
-    text = re.sub(r'`([^`]+)`', r'\1', text)
-    text = re.sub(r'\[([^\]]+)\]\(([^)]+)\)', r'<a href="\2">\1</a>', text)
+    text = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", text)
+    text = re.sub(r"\*(.*?)\*", r"<i>\1</i>", text)
+    text = re.sub(r"`([^`]+)`", r"\1", text)
+    text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2">\1</a>', text)
     # escape bare & that aren't already entities
-    text = re.sub(r'&(?!amp;|lt;|gt;|quot;)', '&amp;', text)
+    text = re.sub(r"&(?!amp;|lt;|gt;|quot;)", "&amp;", text)
     return text
 
 
@@ -83,14 +84,14 @@ def _md_to_html(text: str) -> str:
         elif line.startswith("### "):
             close_list()
             parts.append(f"<h3>{_inline(line[4:].strip())}</h3>")
-        elif re.match(r'^[-*] ', line):
+        elif re.match(r"^[-*] ", line):
             if not in_list:
                 parts.append("<ul>")
                 in_list = True
             # Handle indented sub-bullets
             content = _inline(line[2:].strip())
             parts.append(f"<li>{content}</li>")
-        elif re.match(r'^  [-*] ', line):
+        elif re.match(r"^  [-*] ", line):
             if not in_list:
                 parts.append("<ul>")
                 in_list = True
@@ -112,6 +113,7 @@ def _md_to_html(text: str) -> str:
 
 # ── PDF class ─────────────────────────────────────────────────────────────────
 
+
 class _ReleasePDF(FPDF):
     def __init__(self, version: str):
         super().__init__()
@@ -123,7 +125,13 @@ class _ReleasePDF(FPDF):
         self.set_fill_color(20, 20, 20)
         self.set_text_color(255, 255, 255)
         self.set_font("Helvetica", "B", 10)
-        self.cell(0, 9, _sanitize(f"  NyankoOS Release Notes - {self._version}"), fill=True, ln=True)
+        self.cell(
+            0,
+            9,
+            _sanitize(f"  NyankoOS Release Notes - {self._version}"),
+            fill=True,
+            ln=True,
+        )
         self.set_text_color(0, 0, 0)
         self.ln(3)
 
@@ -131,7 +139,12 @@ class _ReleasePDF(FPDF):
         self.set_y(-14)
         self.set_font("Helvetica", "I", 8)
         self.set_text_color(130)
-        self.cell(0, 8, _sanitize(f"Page {self.page_no()} | NyankoOS {self._version}"), align="C")
+        self.cell(
+            0,
+            8,
+            _sanitize(f"Page {self.page_no()} | NyankoOS {self._version}"),
+            align="C",
+        )
         self.set_text_color(0)
 
     def section_title(self, title: str):
@@ -141,9 +154,11 @@ class _ReleasePDF(FPDF):
         self.ln(2)
 
     def readiness_badge(self, score: int, recommendation: str, bump: str):
-        color = {"READY": (0, 160, 80), "HOLD": (220, 140, 0), "BLOCKED": (200, 40, 40)}.get(
-            recommendation, (80, 80, 80)
-        )
+        color = {
+            "READY": (0, 160, 80),
+            "HOLD": (220, 140, 0),
+            "BLOCKED": (200, 40, 40),
+        }.get(recommendation, (80, 80, 80))
         self.set_font("Helvetica", "B", 11)
         self.set_fill_color(*color)
         self.set_text_color(255, 255, 255)
@@ -159,6 +174,7 @@ class _ReleasePDF(FPDF):
 
 
 # ── Public API ────────────────────────────────────────────────────────────────
+
 
 def generate(
     version: str,

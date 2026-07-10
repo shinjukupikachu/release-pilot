@@ -1,5 +1,4 @@
 from __future__ import annotations
-import asyncio
 import json
 import uuid
 from enum import Enum
@@ -8,19 +7,23 @@ import strawberry
 from strawberry.fastapi import GraphQLRouter
 from fastapi import FastAPI, BackgroundTasks
 from fastapi.responses import HTMLResponse, PlainTextResponse, FileResponse
-from release_pilot import config
-from release_pilot.store import init_db, save_release, list_releases, get_release, release_exists
+from release_pilot.store import (
+    init_db,
+    save_release,
+    list_releases,
+    get_release,
+    release_exists,
+)
 from release_pilot.git import get_commits
 from release_pilot.parser import parse_commits
 from release_pilot.semver import build_changeset
-from release_pilot.models import (
-    ReleaseResult, ReadinessReport, TraceabilityRow, JiraTicket, CIStatus, ReleaseSummary
-)
+from release_pilot.models import ReleaseResult
 
 # ── In-memory job store ─────────────────────────────────────────────────
 jobs: dict[str, dict] = {}
 
 # ── Strawberry type definitions ─────────────────────────────────────────
+
 
 @strawberry.enum
 class JobStatus(Enum):
@@ -29,11 +32,13 @@ class JobStatus(Enum):
     DONE = "DONE"
     ERROR = "ERROR"
 
+
 @strawberry.enum
 class Recommendation(Enum):
     READY = "READY"
     HOLD = "HOLD"
     BLOCKED = "BLOCKED"
+
 
 @strawberry.type
 class JiraTicketGQL:
@@ -43,12 +48,14 @@ class JiraTicketGQL:
     issue_type: str
     priority: Optional[str]
 
+
 @strawberry.type
 class CIStatusGQL:
     total: int
     passed: int
     failed: int
     failed_names: list[str]
+
 
 @strawberry.type
 class TraceabilityRowGQL:
@@ -61,6 +68,7 @@ class TraceabilityRowGQL:
     pr_url: Optional[str]
     ci_status: Optional[CIStatusGQL]
 
+
 @strawberry.type
 class ReadinessReportGQL:
     score: int
@@ -68,6 +76,7 @@ class ReadinessReportGQL:
     rationale: str
     risk_factors: list[str]
     rollback_plan: str
+
 
 @strawberry.type
 class ReleaseResultGQL:
@@ -79,6 +88,7 @@ class ReleaseResultGQL:
     marketing_notes: Optional[str]
     traceability: list[TraceabilityRowGQL]
 
+
 @strawberry.type
 class ReleaseSummaryGQL:
     version: str
@@ -87,12 +97,14 @@ class ReleaseSummaryGQL:
     readiness_score: int
     suggested_bump: str
 
+
 @strawberry.type
 class ReleaseJobGQL:
     job_id: str
     status: str
     result: Optional[ReleaseResultGQL] = None
     error: Optional[str] = None
+
 
 @strawberry.input
 class ReleaseInputGQL:
@@ -101,7 +113,9 @@ class ReleaseInputGQL:
     channel: str
     thread_ts: Optional[str] = None
 
+
 # ── Converters ──────────────────────────────────────────────────────────
+
 
 def _to_gql_result(r: ReleaseResult) -> ReleaseResultGQL:
     readiness = ReadinessReportGQL(
@@ -117,10 +131,26 @@ def _to_gql_result(r: ReleaseResult) -> ReleaseResultGQL:
             description=row.description,
             commit_type=row.commit_type,
             is_breaking=row.is_breaking,
-            jira_tickets=[JiraTicketGQL(key=t.key, summary=t.summary, status=t.status, issue_type=t.issue_type, priority=t.priority) for t in row.jira_tickets],
+            jira_tickets=[
+                JiraTicketGQL(
+                    key=t.key,
+                    summary=t.summary,
+                    status=t.status,
+                    issue_type=t.issue_type,
+                    priority=t.priority,
+                )
+                for t in row.jira_tickets
+            ],
             pr_number=row.pr_number,
             pr_url=row.pr_url,
-            ci_status=CIStatusGQL(total=row.ci_status.total, passed=row.ci_status.passed, failed=row.ci_status.failed, failed_names=row.ci_status.failed_names) if row.ci_status else None,
+            ci_status=CIStatusGQL(
+                total=row.ci_status.total,
+                passed=row.ci_status.passed,
+                failed=row.ci_status.failed,
+                failed_names=row.ci_status.failed_names,
+            )
+            if row.ci_status
+            else None,
         )
         for row in r.traceability
     ]
@@ -134,11 +164,16 @@ def _to_gql_result(r: ReleaseResult) -> ReleaseResultGQL:
         traceability=traceability,
     )
 
+
 # ── Pipeline ─────────────────────────────────────────────────────────────
 
-async def run_release_pipeline(job_id: str, version: str, from_ref: str, channel: str, thread_ts: str | None = None) -> None:
+
+async def run_release_pipeline(
+    job_id: str, version: str, from_ref: str, channel: str, thread_ts: str | None = None
+) -> None:
     """Runs the full release pipeline via coordinator."""
     import logging
+
     log = logging.getLogger(__name__)
     jobs[job_id]["status"] = "RUNNING"
     try:
@@ -172,13 +207,17 @@ async def run_release_pipeline(job_id: str, version: str, from_ref: str, channel
 
         # Post to Slack before DB write so failures don't block delivery
         from release_pilot.slack_poster import post_all as slack_post_all
-        slack_post_all(result, channel, release_config.SLACK_BOT_TOKEN, thread_ts=thread_ts)
+
+        slack_post_all(
+            result, channel, release_config.SLACK_BOT_TOKEN, thread_ts=thread_ts
+        )
 
         try:
             if not release_exists(version):
                 save_release(result, from_ref)
         except Exception as db_err:
             import logging
+
             logging.getLogger(__name__).warning(f"DB save failed (non-fatal): {db_err}")
 
         # Prompt user to generate PDF
@@ -189,17 +228,29 @@ async def run_release_pipeline(job_id: str, version: str, from_ref: str, channel
             blocks=[
                 {
                     "type": "section",
-                    "text": {"type": "mrkdwn", "text": f"📄 Would you like to generate a *PDF* of the *{version}* release notes?"},
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": f"📄 Would you like to generate a *PDF* of the *{version}* release notes?",
+                    },
                 },
                 {
                     "type": "actions",
                     "elements": [
                         {
                             "type": "button",
-                            "text": {"type": "plain_text", "text": "✅ Yes, generate PDF"},
+                            "text": {
+                                "type": "plain_text",
+                                "text": "✅ Yes, generate PDF",
+                            },
                             "style": "primary",
                             "action_id": "generate_pdf",
-                            "value": json.dumps({"version": version, "channel": channel, "thread_ts": thread_ts}),
+                            "value": json.dumps(
+                                {
+                                    "version": version,
+                                    "channel": channel,
+                                    "thread_ts": thread_ts,
+                                }
+                            ),
                         },
                         {
                             "type": "button",
@@ -214,11 +265,13 @@ async def run_release_pipeline(job_id: str, version: str, from_ref: str, channel
 
     except Exception as e:
         import traceback
+
         jobs[job_id]["status"] = "ERROR"
         jobs[job_id]["error"] = f"{type(e).__name__}: {e}\n{traceback.format_exc()}"
         try:
             from slack_sdk import WebClient as _SlackClient
             from release_pilot import config as release_config
+
             _SlackClient(token=release_config.SLACK_BOT_TOKEN).chat_postMessage(
                 channel=channel,
                 thread_ts=thread_ts,
@@ -227,17 +280,29 @@ async def run_release_pipeline(job_id: str, version: str, from_ref: str, channel
         except Exception:
             pass
 
+
 # ── GraphQL schema ────────────────────────────────────────────────────────
+
 
 @strawberry.type
 class Mutation:
     @strawberry.mutation
-    async def trigger_release(self, input: ReleaseInputGQL, info: strawberry.types.Info) -> ReleaseJobGQL:
+    async def trigger_release(
+        self, input: ReleaseInputGQL, info: strawberry.types.Info
+    ) -> ReleaseJobGQL:
         job_id = str(uuid.uuid4())
         jobs[job_id] = {"status": "PENDING", "result": None, "error": None}
         background_tasks: BackgroundTasks = info.context["background_tasks"]
-        background_tasks.add_task(run_release_pipeline, job_id, input.version, input.from_ref, input.channel, input.thread_ts)
+        background_tasks.add_task(
+            run_release_pipeline,
+            job_id,
+            input.version,
+            input.from_ref,
+            input.channel,
+            input.thread_ts,
+        )
         return ReleaseJobGQL(job_id=job_id, status="PENDING")
+
 
 @strawberry.type
 class Query:
@@ -257,60 +322,79 @@ class Query:
     @strawberry.field
     def release_history(self, limit: int = 20) -> list[ReleaseSummaryGQL]:
         summaries = list_releases(limit=limit)
-        return [ReleaseSummaryGQL(
-            version=s.version, created_at=s.created_at,
-            recommendation=s.recommendation, readiness_score=s.readiness_score,
-            suggested_bump=s.suggested_bump,
-        ) for s in summaries]
+        return [
+            ReleaseSummaryGQL(
+                version=s.version,
+                created_at=s.created_at,
+                recommendation=s.recommendation,
+                readiness_score=s.readiness_score,
+                suggested_bump=s.suggested_bump,
+            )
+            for s in summaries
+        ]
 
     @strawberry.field
     def release(self, version: str) -> Optional[ReleaseResultGQL]:
         r = get_release(version)
         return _to_gql_result(r) if r else None
 
+
 # ── FastAPI app ───────────────────────────────────────────────────────────
 
 schema = strawberry.Schema(query=Query, mutation=Mutation)
 
+
 async def get_context(background_tasks: BackgroundTasks):
     return {"background_tasks": background_tasks}
+
 
 graphql_router = GraphQLRouter(schema, context_getter=get_context)
 
 app = FastAPI(title="release-pilot")
 app.include_router(graphql_router, prefix="/graphql")
 
+
 @app.on_event("startup")
 def startup():
     init_db()
     from release_pilot.seed import seed_releases
+
     seeded = seed_releases()
     if seeded:
         import logging
+
         logging.getLogger(__name__).info(f"Seeded {seeded} historical releases")
+
 
 @app.get("/releases", response_class=HTMLResponse)
 def releases_index():
     from pathlib import Path
     from release_pilot import config as release_config
+
     pdf_dir = Path(release_config.PDF_DIR)
 
     summaries = list_releases(limit=50)
     rows = ""
     for s in summaries:
-        badge = {"READY": "🟢", "HOLD": "🟡", "BLOCKED": "🔴"}.get(s.recommendation, "⚪")
+        badge = {"READY": "🟢", "HOLD": "🟡", "BLOCKED": "🔴"}.get(
+            s.recommendation, "⚪"
+        )
         pdf_exists = (pdf_dir / f"{s.version}.pdf").exists()
-        pdf_link = f'<a href="/releases/{s.version}.pdf" title="Download PDF">📄 PDF</a>' if pdf_exists else '<span style="color:#aaa">—</span>'
+        pdf_link = (
+            f'<a href="/releases/{s.version}.pdf" title="Download PDF">📄 PDF</a>'
+            if pdf_exists
+            else '<span style="color:#aaa">—</span>'
+        )
         rows += (
-            f'<tr>'
+            f"<tr>"
             f'<td><a href="/releases/{s.version}">{s.version}</a></td>'
-            f'<td>{s.created_at[:10]}</td>'
-            f'<td>{badge} {s.recommendation}</td>'
-            f'<td>{s.readiness_score}/100</td>'
-            f'<td>{s.suggested_bump}</td>'
+            f"<td>{s.created_at[:10]}</td>"
+            f"<td>{badge} {s.recommendation}</td>"
+            f"<td>{s.readiness_score}/100</td>"
+            f"<td>{s.suggested_bump}</td>"
             f'<td><a href="/releases/{s.version}.md">⬇ .md</a></td>'
-            f'<td>{pdf_link}</td>'
-            f'</tr>\n'
+            f"<td>{pdf_link}</td>"
+            f"</tr>\n"
         )
     return f"""<!DOCTYPE html>
 <html>
@@ -337,15 +421,25 @@ def releases_index():
 </body>
 </html>"""
 
+
 # ── IMPORTANT: specific extension routes must come BEFORE the bare {version} route ──
+
 
 @app.get("/releases/{version}.md", response_class=PlainTextResponse)
 def release_markdown(version: str):
     r = get_release(version)
     if not r:
         return PlainTextResponse("Release not found", status_code=404)
-    marketing_section = f"\n\n---\n\n## Marketing Notes\n\n{r.marketing_notes}" if r.marketing_notes else ""
-    internal_section = f"\n\n---\n\n## Internal Announcement\n\n{r.internal_announcement}" if r.internal_announcement else ""
+    marketing_section = (
+        f"\n\n---\n\n## Marketing Notes\n\n{r.marketing_notes}"
+        if r.marketing_notes
+        else ""
+    )
+    internal_section = (
+        f"\n\n---\n\n## Internal Announcement\n\n{r.internal_announcement}"
+        if r.internal_announcement
+        else ""
+    )
     return f"""# {r.version} Release Notes
 
 > **Readiness:** {r.readiness.recommendation} | **Score:** {r.readiness.score}/100 | **Bump:** {r.suggested_bump}
@@ -365,7 +459,11 @@ def release_pdf(version: str):
     pdf_path = Path(release_config.PDF_DIR) / f"{version}.pdf"
     if not pdf_path.exists():
         raise HTTPException(status_code=404, detail="PDF not found — generate it first")
-    return FileResponse(str(pdf_path), media_type="application/pdf", filename=f"release-notes-{version}.pdf")
+    return FileResponse(
+        str(pdf_path),
+        media_type="application/pdf",
+        filename=f"release-notes-{version}.pdf",
+    )
 
 
 @app.post("/releases/{version}/generate-pdf")
@@ -377,6 +475,7 @@ def generate_pdf(version: str):
     r = get_release(version)
     if not r:
         from fastapi import HTTPException
+
         raise HTTPException(status_code=404, detail="Release not found")
 
     pdf_dir = Path(release_config.PDF_DIR)
@@ -401,6 +500,7 @@ def generate_pdf(version: str):
 def release_detail(version: str):
     from pathlib import Path
     from release_pilot import config as release_config
+
     r = get_release(version)
     if not r:
         return HTMLResponse("<h2>Release not found</h2>", status_code=404)
@@ -408,7 +508,8 @@ def release_detail(version: str):
     pdf_exists = (Path(release_config.PDF_DIR) / f"{version}.pdf").exists()
     pdf_button = (
         f'<a class="dl-btn" href="/releases/{version}.pdf">📄 Download PDF</a>'
-        if pdf_exists else ""
+        if pdf_exists
+        else ""
     )
 
     customer_md = r.customer_notes or "_No customer notes generated._"
@@ -416,7 +517,9 @@ def release_detail(version: str):
     internal_md = r.internal_announcement or "_No internal announcement generated._"
 
     rec = r.readiness.recommendation
-    badge_color = {"READY": "#0a8a45", "HOLD": "#b8860b", "BLOCKED": "#c0392b"}.get(rec, "#555")
+    badge_color = {"READY": "#0a8a45", "HOLD": "#b8860b", "BLOCKED": "#c0392b"}.get(
+        rec, "#555"
+    )
 
     return f"""<!DOCTYPE html>
 <html>

@@ -1,11 +1,14 @@
 from __future__ import annotations
-import os
 import pytest
-import tempfile
 from release_pilot.models import (
-    CommitInfo, ParsedCommit, JiraTicket, CIStatus,
-    TraceabilityRow, ChangeSet, ReadinessReport, ReleaseResult
+    CommitInfo,
+    JiraTicket,
+    CIStatus,
+    TraceabilityRow,
+    ReadinessReport,
+    ReleaseResult,
 )
+
 
 @pytest.fixture
 def sample_commit_infos() -> list[CommitInfo]:
@@ -44,6 +47,7 @@ def sample_commit_infos() -> list[CommitInfo]:
         ),
     ]
 
+
 @pytest.fixture
 def sample_release_result() -> ReleaseResult:
     readiness = ReadinessReport(
@@ -59,7 +63,15 @@ def sample_release_result() -> ReleaseResult:
             description="add vision-guided pick confirmation",
             commit_type="feat",
             is_breaking=False,
-            jira_tickets=[JiraTicket(key="NYANKO-456", summary="Vision pick confirm", status="Done", issue_type="Story", priority="High")],
+            jira_tickets=[
+                JiraTicket(
+                    key="NYANKO-456",
+                    summary="Vision pick confirm",
+                    status="Done",
+                    issue_type="Story",
+                    priority="High",
+                )
+            ],
             pr_number=45,
             pr_url="https://github.com/nyanko/nyankoos/pull/45",
             ci_status=CIStatus(total=14, passed=14, failed=0),
@@ -69,10 +81,26 @@ def sample_release_result() -> ReleaseResult:
             description="rename /api/v1/robot-status to /api/v2/status",
             commit_type="feat",
             is_breaking=True,
-            jira_tickets=[JiraTicket(key="NYANKO-789", summary="API versioning", status="Done", issue_type="Task", priority="High")],
+            jira_tickets=[
+                JiraTicket(
+                    key="NYANKO-789",
+                    summary="API versioning",
+                    status="Done",
+                    issue_type="Task",
+                    priority="High",
+                )
+            ],
             pr_number=46,
             pr_url="https://github.com/nyanko/nyankoos/pull/46",
-            ci_status=CIStatus(total=14, passed=12, failed=2, failed_names=["integration/api-backward-compat", "integration/client-sdk-v1"]),
+            ci_status=CIStatus(
+                total=14,
+                passed=12,
+                failed=2,
+                failed_names=[
+                    "integration/api-backward-compat",
+                    "integration/client-sdk-v1",
+                ],
+            ),
         ),
     ]
     return ReleaseResult(
@@ -84,6 +112,7 @@ def sample_release_result() -> ReleaseResult:
         marketing_notes="NyankoOS v2.3.0 delivers faster picking.",
         traceability=traceability,
     )
+
 
 @pytest.fixture
 def tmp_db(tmp_path) -> str:

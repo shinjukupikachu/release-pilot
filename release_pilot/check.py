@@ -1,4 +1,5 @@
 """Release readiness check: commits → Jira → author/manager grouping."""
+
 from __future__ import annotations
 import json
 import re
@@ -41,11 +42,19 @@ class AuthorGroup:
 
     @property
     def open_tickets(self) -> list[JiraInfo]:
-        return [t for t in self.jira_tickets if t.status.lower() not in ("done", "closed", "resolved")]
+        return [
+            t
+            for t in self.jira_tickets
+            if t.status.lower() not in ("done", "closed", "resolved")
+        ]
 
     @property
     def closed_tickets(self) -> list[JiraInfo]:
-        return [t for t in self.jira_tickets if t.status.lower() in ("done", "closed", "resolved")]
+        return [
+            t
+            for t in self.jira_tickets
+            if t.status.lower() in ("done", "closed", "resolved")
+        ]
 
 
 @dataclass
@@ -87,7 +96,9 @@ def _load_commits_from_test_data() -> list[dict]:
     return []
 
 
-def _load_commits_from_db(version: str, db_path: str = config.DB_PATH) -> list[dict] | None:
+def _load_commits_from_db(
+    version: str, db_path: str = config.DB_PATH
+) -> list[dict] | None:
     """Return commit dicts from DB traceability for a known version, or None if not found."""
     try:
         with sqlite3.connect(db_path) as conn:
@@ -99,16 +110,18 @@ def _load_commits_from_db(version: str, db_path: str = config.DB_PATH) -> list[d
                 return None, None
             rows = conn.execute(
                 "SELECT short_hash, description, jira_keys FROM traceability_rows WHERE release_id = ?",
-                (release["id"],)
+                (release["id"],),
             ).fetchall()
         commits = []
         for r in rows:
-            commits.append({
-                "short_hash": r["short_hash"],
-                "subject": r["description"],
-                "author": "Unknown",
-                "jira_keys_parsed": json.loads(r["jira_keys"] or "[]"),
-            })
+            commits.append(
+                {
+                    "short_hash": r["short_hash"],
+                    "subject": r["description"],
+                    "author": "Unknown",
+                    "jira_keys_parsed": json.loads(r["jira_keys"] or "[]"),
+                }
+            )
         return commits, release["from_ref"]
     except Exception:
         return None, None
@@ -125,11 +138,13 @@ def run_check(version: str | None = None) -> ReadinessCheckResult:
         db_result, from_ref = _load_commits_from_db(version)
         if db_result:
             for c in db_result:
-                raw_commits.append({
-                    "short_hash": c["short_hash"],
-                    "subject": c["subject"],
-                    "author": c.get("author", "Unknown"),
-                })
+                raw_commits.append(
+                    {
+                        "short_hash": c["short_hash"],
+                        "subject": c["subject"],
+                        "author": c.get("author", "Unknown"),
+                    }
+                )
                 pre_parsed_keys[c["short_hash"]] = c.get("jira_keys_parsed", [])
 
     if not raw_commits:
@@ -139,13 +154,17 @@ def run_check(version: str | None = None) -> ReadinessCheckResult:
     commit_infos: list[CommitInfo] = []
     for c in raw_commits:
         full_text = f"{c.get('subject', '')} {c.get('body', '')}"
-        keys = pre_parsed_keys.get(c.get("short_hash", "")) or _JIRA_KEY_RE.findall(full_text)
-        commit_infos.append(CommitInfo(
-            short_hash=c.get("short_hash", ""),
-            subject=c.get("subject", ""),
-            author=c.get("author", "Unknown"),
-            jira_keys=list(dict.fromkeys(keys)),  # dedupe, preserve order
-        ))
+        keys = pre_parsed_keys.get(c.get("short_hash", "")) or _JIRA_KEY_RE.findall(
+            full_text
+        )
+        commit_infos.append(
+            CommitInfo(
+                short_hash=c.get("short_hash", ""),
+                subject=c.get("subject", ""),
+                author=c.get("author", "Unknown"),
+                jira_keys=list(dict.fromkeys(keys)),  # dedupe, preserve order
+            )
+        )
 
     # Collect all unique Jira keys
     all_keys: list[str] = []
