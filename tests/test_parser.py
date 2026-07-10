@@ -1,12 +1,11 @@
 from __future__ import annotations
-from release_pilot.parser import parse_subject, parse_body, parse_commit, parse_commits
+
+from release_pilot.parser import parse_body, parse_commit, parse_commits, parse_subject
 
 
 class TestParseSubject:
     def test_feat_with_scope(self):
-        t, scope, breaking, clean = parse_subject(
-            "feat(picking): add vision confirmation"
-        )
+        t, scope, breaking, clean = parse_subject("feat(picking): add vision confirmation")
         assert t == "feat"
         assert scope == "picking"
         assert breaking is False

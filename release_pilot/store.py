@@ -1,15 +1,17 @@
 from __future__ import annotations
+
 import json
 import sqlite3
-from datetime import datetime, timezone
+from datetime import UTC, datetime
+
 from release_pilot import config
 from release_pilot.models import (
+    CIStatus,
+    JiraTicket,
+    ReadinessReport,
     ReleaseResult,
     ReleaseSummary,
-    ReadinessReport,
     TraceabilityRow,
-    JiraTicket,
-    CIStatus,
 )
 
 _CREATE_RELEASES = """
@@ -54,10 +56,8 @@ def init_db(db_path: str = config.DB_PATH) -> None:
         conn.commit()
 
 
-def save_release(
-    result: ReleaseResult, from_ref: str, db_path: str = config.DB_PATH
-) -> int:
-    created_at = datetime.now(timezone.utc).isoformat()
+def save_release(result: ReleaseResult, from_ref: str, db_path: str = config.DB_PATH) -> int:
+    created_at = datetime.now(UTC).isoformat()
     with sqlite3.connect(db_path) as conn:
         cur = conn.execute(
             """INSERT INTO releases
@@ -110,9 +110,7 @@ def save_release(
 def get_release(version: str, db_path: str = config.DB_PATH) -> ReleaseResult | None:
     with sqlite3.connect(db_path) as conn:
         conn.row_factory = sqlite3.Row
-        row = conn.execute(
-            "SELECT * FROM releases WHERE version = ?", (version,)
-        ).fetchone()
+        row = conn.execute("SELECT * FROM releases WHERE version = ?", (version,)).fetchone()
         if not row:
             return None
         rows = conn.execute(
@@ -171,9 +169,7 @@ def get_release(version: str, db_path: str = config.DB_PATH) -> ReleaseResult | 
     )
 
 
-def list_releases(
-    db_path: str = config.DB_PATH, limit: int = 20
-) -> list[ReleaseSummary]:
+def list_releases(db_path: str = config.DB_PATH, limit: int = 20) -> list[ReleaseSummary]:
     with sqlite3.connect(db_path) as conn:
         conn.row_factory = sqlite3.Row
         rows = conn.execute(
@@ -196,8 +192,6 @@ def list_releases(
 def release_exists(version: str, db_path: str = config.DB_PATH) -> bool:
     with sqlite3.connect(db_path) as conn:
         return (
-            conn.execute(
-                "SELECT 1 FROM releases WHERE version = ?", (version,)
-            ).fetchone()
+            conn.execute("SELECT 1 FROM releases WHERE version = ?", (version,)).fetchone()
             is not None
         )

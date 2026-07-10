@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from release_pilot.agents.base import AgentDefinition
 
 GITHUB_ENRICHMENT_SYSTEM = """You are github-enrichment-agent for release-pilot.

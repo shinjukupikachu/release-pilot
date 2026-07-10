@@ -1,8 +1,10 @@
 """Generate PDF release notes using fpdf2."""
 
 from __future__ import annotations
+
 import re
 from pathlib import Path
+
 from fpdf import FPDF
 
 _UNICODE_MAP = {

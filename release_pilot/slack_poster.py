@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 import os
+
 from release_pilot.models import ReleaseResult
 
 try:
@@ -28,10 +30,7 @@ def _build_traceability_table(result: ReleaseResult) -> str:
     ]
     for row in result.traceability:
         jira_str = (
-            " ".join(
-                f"{t.key} {'✓' if t.status == 'Done' else '⚠'}"
-                for t in row.jira_tickets
-            )
+            " ".join(f"{t.key} {'✓' if t.status == 'Done' else '⚠'}" for t in row.jira_tickets)
             or "—"
         )
         pr_str = f"[#{row.pr_number}]({row.pr_url})" if row.pr_number else "—"
@@ -44,12 +43,8 @@ def _build_traceability_table(result: ReleaseResult) -> str:
 
 def _build_readiness_blocks(result: ReleaseResult) -> list[dict]:
     rec = result.readiness.recommendation
-    badge = {"READY": "✅ READY", "HOLD": "⚠️ HOLD", "BLOCKED": "🚫 BLOCKED"}.get(
-        rec, rec
-    )
-    risk_text = (
-        "\n".join(f"• {r}" for r in result.readiness.risk_factors) or "None identified"
-    )
+    badge = {"READY": "✅ READY", "HOLD": "⚠️ HOLD", "BLOCKED": "🚫 BLOCKED"}.get(rec, rec)
+    risk_text = "\n".join(f"• {r}" for r in result.readiness.risk_factors) or "None identified"
 
     blocks = [
         {
@@ -112,9 +107,7 @@ def _section_blocks(text: str) -> list[dict]:
             split_at = _SLACK_TEXT_LIMIT
         chunks.append(remaining[:split_at])
         remaining = remaining[split_at:].lstrip("\n")
-    return [
-        {"type": "section", "text": {"type": "mrkdwn", "text": c}} for c in chunks if c
-    ]
+    return [{"type": "section", "text": {"type": "mrkdwn", "text": c}} for c in chunks if c]
 
 
 def post_all(

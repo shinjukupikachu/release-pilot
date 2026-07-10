@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 import json
 from pathlib import Path
+
 from mcp.server.fastmcp import FastMCP
 
 TEST_DATA = Path(__file__).parent / "test_data"
@@ -37,9 +39,7 @@ def get_check_runs(commit_sha: str) -> dict:
     """Get CI check-run results for a commit SHA.
     Returns total, passed, failed counts and names of failing checks."""
     data = json.loads((TEST_DATA / "github_check_runs.json").read_text())
-    return data.get(
-        commit_sha, {"total": 0, "passed": 0, "failed": 0, "failed_names": []}
-    )
+    return data.get(commit_sha, {"total": 0, "passed": 0, "failed": 0, "failed_names": []})
 
 
 if __name__ == "__main__":

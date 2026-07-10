@@ -1,6 +1,7 @@
 """Mock org chart for demo purposes."""
 
 from __future__ import annotations
+
 from dataclasses import dataclass
 
 

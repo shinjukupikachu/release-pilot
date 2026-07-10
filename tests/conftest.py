@@ -1,12 +1,14 @@
 from __future__ import annotations
+
 import pytest
+
 from release_pilot.models import (
+    CIStatus,
     CommitInfo,
     JiraTicket,
-    CIStatus,
-    TraceabilityRow,
     ReadinessReport,
     ReleaseResult,
+    TraceabilityRow,
 )
 
 

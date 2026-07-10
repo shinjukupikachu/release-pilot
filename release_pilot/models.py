@@ -46,9 +46,7 @@ class ParsedCommit:
     breaking_note: str | None  # text after "BREAKING CHANGE: " in body
     clean_subject: str  # subject without type(scope)!: prefix
     jira_keys: list[str] = field(default_factory=list)  # e.g. ["NYANKO-456"]
-    audience: str | None = (
-        None  # "internal" | "customer" | "marketing" — set by classifier agent
-    )
+    audience: str | None = None  # "internal" | "customer" | "marketing" — set by classifier agent
     # enrichment fields (set after MCP phase)
     jira_tickets: list[JiraTicket] = field(default_factory=list)
     pr_number: int | None = None

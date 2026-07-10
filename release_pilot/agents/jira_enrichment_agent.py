@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from release_pilot.agents.base import AgentDefinition
 
 JIRA_ENRICHMENT_SYSTEM = """You are jira-enrichment-agent for release-pilot.

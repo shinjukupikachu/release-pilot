@@ -1,8 +1,9 @@
 from __future__ import annotations
-import sqlite3
-from datetime import datetime, timezone, timedelta
-from release_pilot import config
 
+import sqlite3
+from datetime import UTC, datetime, timedelta
+
+from release_pilot import config
 
 _RELEASES = [
     {
@@ -435,9 +436,7 @@ def seed_releases(db_path: str = config.DB_PATH) -> int:
                     )
                 continue
 
-            created_at = (
-                datetime.now(timezone.utc) - timedelta(days=r["days_ago"])
-            ).isoformat()
+            created_at = (datetime.now(UTC) - timedelta(days=r["days_ago"])).isoformat()
 
             cur = conn.execute(
                 """INSERT INTO releases

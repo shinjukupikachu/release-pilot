@@ -1,8 +1,10 @@
 from __future__ import annotations
+
 import json
 import subprocess
-from release_pilot.models import CommitInfo
+
 from release_pilot import config
+from release_pilot.models import CommitInfo
 
 
 def get_commits(from_ref: str = "HEAD~10", to_ref: str = "HEAD") -> list[CommitInfo]:

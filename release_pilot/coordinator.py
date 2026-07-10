@@ -1,25 +1,27 @@
 from __future__ import annotations
+
 import asyncio
 import json
-from release_pilot.models import (
-    ChangeSet,
-    ReleaseResult,
-    ReadinessReport,
-    TraceabilityRow,
-    JiraTicket,
-    CIStatus,
-)
-from release_pilot.agents.jira_enrichment_agent import JIRA_ENRICHMENT_AGENT
-from release_pilot.agents.github_enrichment_agent import GITHUB_ENRICHMENT_AGENT
-from release_pilot.agents.classifier_agent import CLASSIFIER_AGENT
-from release_pilot.agents.readiness_agent import READINESS_AGENT
-from release_pilot.agents.customer_notes_agent import CUSTOMER_NOTES_AGENT
-from release_pilot.agents.marketing_notes_agent import MARKETING_NOTES_AGENT
-from release_pilot.agents.breaking_change_agent import BREAKING_CHANGE_AGENT
 
 import anthropic as _anthropic
-from release_pilot.agents.base import AgentDefinition
+
 from release_pilot import config as _config
+from release_pilot.agents.base import AgentDefinition
+from release_pilot.agents.breaking_change_agent import BREAKING_CHANGE_AGENT
+from release_pilot.agents.classifier_agent import CLASSIFIER_AGENT
+from release_pilot.agents.customer_notes_agent import CUSTOMER_NOTES_AGENT
+from release_pilot.agents.github_enrichment_agent import GITHUB_ENRICHMENT_AGENT
+from release_pilot.agents.jira_enrichment_agent import JIRA_ENRICHMENT_AGENT
+from release_pilot.agents.marketing_notes_agent import MARKETING_NOTES_AGENT
+from release_pilot.agents.readiness_agent import READINESS_AGENT
+from release_pilot.models import (
+    ChangeSet,
+    CIStatus,
+    JiraTicket,
+    ReadinessReport,
+    ReleaseResult,
+    TraceabilityRow,
+)
 
 
 def _llm_label() -> str:
@@ -50,14 +52,10 @@ async def run(changeset: ChangeSet, progress_cb=None) -> ReleaseResult:
 
     # ── Phase 0: enrichment ───────────────────────────────────────────────
     if _config.TEST_DATA:
-        _post(
-            f"⚙️ *Phase 0* — Loading {n} commits + Jira & GitHub data from test fixtures"
-        )
+        _post(f"⚙️ *Phase 0* — Loading {n} commits + Jira & GitHub data from test fixtures")
         jira_result, github_result = _load_enrichment_from_test_data()
     else:
-        _post(
-            f"⚙️ *Phase 0* — Fetching Jira tickets & GitHub PR/CI data for {n} commits via MCP"
-        )
+        _post(f"⚙️ *Phase 0* — Fetching Jira tickets & GitHub PR/CI data for {n} commits via MCP")
         all_jira_keys = list({k for c in changeset.commits for k in c.jira_keys})
         all_shas = [c.hash for c in changeset.commits]
         jira_result, github_result = await asyncio.gather(
@@ -82,15 +80,11 @@ async def run(changeset: ChangeSet, progress_cb=None) -> ReleaseResult:
         _run_agent(READINESS_AGENT, readiness_input),
     )
 
-    audience_map = {
-        c["short_hash"]: c["audience"] for c in classify_result.get("commits", [])
-    }
+    audience_map = {c["short_hash"]: c["audience"] for c in classify_result.get("commits", [])}
     for commit in enriched.commits:
         commit.audience = audience_map.get(commit.short_hash, "internal")
 
-    customer_commits = [
-        c for c in enriched.commits if c.audience in ("customer", "marketing")
-    ]
+    customer_commits = [c for c in enriched.commits if c.audience in ("customer", "marketing")]
     marketing_commits = [c for c in enriched.commits if c.audience == "marketing"]
     # Fall back to top customer commits when no marketing-tier commits were classified
     marketing_source = marketing_commits if marketing_commits else customer_commits[:5]
@@ -188,9 +182,7 @@ def _load_test_result(changeset: ChangeSet) -> ReleaseResult:
     readiness_data = data["readiness"]
     jira_data = json.loads((_config.TEST_DATA_DIR / "jira_issues.json").read_text())
     github_prs = json.loads((_config.TEST_DATA_DIR / "github_prs.json").read_text())
-    github_ci = json.loads(
-        (_config.TEST_DATA_DIR / "github_check_runs.json").read_text()
-    )
+    github_ci = json.loads((_config.TEST_DATA_DIR / "github_check_runs.json").read_text())
 
     audience_map = {c["short_hash"]: c["audience"] for c in classify["commits"]}
     traceability = []
@@ -239,9 +231,7 @@ def _load_test_result(changeset: ChangeSet) -> ReleaseResult:
 
     def _vsub(text: str | None) -> str | None:
         return (
-            text.replace("v2.3.0", version).replace("2.3.0", version.lstrip("v"))
-            if text
-            else text
+            text.replace("v2.3.0", version).replace("2.3.0", version.lstrip("v")) if text else text
         )
 
     return ReleaseResult(
@@ -261,9 +251,7 @@ def _load_test_result(changeset: ChangeSet) -> ReleaseResult:
     )
 
 
-def _merge_enrichment(
-    changeset: ChangeSet, jira_result: dict, github_result: dict
-) -> ChangeSet:
+def _merge_enrichment(changeset: ChangeSet, jira_result: dict, github_result: dict) -> ChangeSet:
     """Attach Jira tickets and GitHub PR/CI data to each commit."""
     jira_issues = jira_result.get("issues", {})
     prs = github_result.get("prs", {})
@@ -310,8 +298,7 @@ def _build_classify_input(changeset: ChangeSet) -> str:
     lines = [f"version: {changeset.version}", "commits:"]
     for c in changeset.commits:
         jira_str = (
-            " ".join(f"[{t.key} {t.status} {t.issue_type}]" for t in c.jira_tickets)
-            or "none"
+            " ".join(f"[{t.key} {t.status} {t.issue_type}]" for t in c.jira_tickets) or "none"
         )
         pr_str = f"#{c.pr_number}" if c.pr_number else "none"
         if c.ci_status:
@@ -404,9 +391,7 @@ async def _run_agent(agent_def: AgentDefinition, user_msg: str) -> dict:
         return _stub_response(agent_def.description)
 
     if not _config.KIMI_API_KEY and not _config.ANTHROPIC_API_KEY:
-        raise RuntimeError(
-            "No LLM API key configured. Set KIMI_API_KEY or ANTHROPIC_API_KEY."
-        )
+        raise RuntimeError("No LLM API key configured. Set KIMI_API_KEY or ANTHROPIC_API_KEY.")
 
     coro = (
         _run_agent_kimi(agent_def, user_msg)
@@ -415,12 +400,13 @@ async def _run_agent(agent_def: AgentDefinition, user_msg: str) -> dict:
     )
     try:
         return await asyncio.wait_for(coro, timeout=60.0)
-    except asyncio.TimeoutError:
+    except TimeoutError:
         raise RuntimeError(f"Agent '{agent_def.description}' timed out after 60s")
 
 
 async def _run_agent_kimi(agent_def: AgentDefinition, user_msg: str) -> dict:
     import logging
+
     import httpx
     from openai import AsyncOpenAI
 

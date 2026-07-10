@@ -1,6 +1,7 @@
 from __future__ import annotations
-from release_pilot.semver import calculate_bump, build_changeset
+
 from release_pilot.parser import parse_commits
+from release_pilot.semver import build_changeset, calculate_bump
 
 
 class TestCalculateBump:

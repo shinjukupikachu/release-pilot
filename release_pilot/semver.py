@@ -1,5 +1,6 @@
 from __future__ import annotations
-from release_pilot.models import ParsedCommit, ChangeSet
+
+from release_pilot.models import ChangeSet, ParsedCommit
 
 _MINOR_TYPES = {"feat"}
 _PATCH_TYPES = {"fix", "perf"}
@@ -16,9 +17,7 @@ def calculate_bump(commits: list[ParsedCommit]) -> str:
     return "none"
 
 
-def build_changeset(
-    version: str, from_ref: str, commits: list[ParsedCommit]
-) -> ChangeSet:
+def build_changeset(version: str, from_ref: str, commits: list[ParsedCommit]) -> ChangeSet:
     return ChangeSet(
         version=version,
         from_ref=from_ref,

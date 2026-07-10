@@ -1,10 +1,11 @@
 from __future__ import annotations
+
 from release_pilot.store import (
-    init_db,
-    save_release,
     get_release,
+    init_db,
     list_releases,
     release_exists,
+    save_release,
 )
 
 
@@ -15,10 +16,7 @@ class TestInitDb:
         init_db(tmp_db)
         with sqlite3.connect(tmp_db) as conn:
             tables = {
-                row[0]
-                for row in conn.execute(
-                    "SELECT name FROM sqlite_master WHERE type='table'"
-                )
+                row[0] for row in conn.execute("SELECT name FROM sqlite_master WHERE type='table'")
             }
         assert "releases" in tables
         assert "traceability_rows" in tables
@@ -45,7 +43,7 @@ class TestSaveAndGetRelease:
         assert get_release("v99.99.99", db_path=tmp_db) is None
 
     def test_marketing_notes_nullable(self, tmp_db):
-        from release_pilot.models import ReleaseResult, ReadinessReport
+        from release_pilot.models import ReadinessReport, ReleaseResult
 
         init_db(tmp_db)
         r = ReleaseResult(
@@ -70,7 +68,7 @@ class TestSaveAndGetRelease:
 
 class TestListReleases:
     def test_returns_newest_first(self, sample_release_result, tmp_db):
-        from release_pilot.models import ReleaseResult, ReadinessReport
+        from release_pilot.models import ReadinessReport, ReleaseResult
 
         init_db(tmp_db)
         save_release(sample_release_result, "v2.2.0", db_path=tmp_db)
@@ -94,7 +92,7 @@ class TestListReleases:
         assert releases[1].version == "v2.3.0"
 
     def test_limit_respected(self, tmp_db):
-        from release_pilot.models import ReleaseResult, ReadinessReport
+        from release_pilot.models import ReadinessReport, ReleaseResult
 
         init_db(tmp_db)
         for i in range(5):

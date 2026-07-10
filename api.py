@@ -1,23 +1,25 @@
 from __future__ import annotations
+
 import json
 import uuid
 from enum import Enum
-from typing import Optional
+
 import strawberry
+from fastapi import BackgroundTasks, FastAPI
+from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse
 from strawberry.fastapi import GraphQLRouter
-from fastapi import FastAPI, BackgroundTasks
-from fastapi.responses import HTMLResponse, PlainTextResponse, FileResponse
-from release_pilot.store import (
-    init_db,
-    save_release,
-    list_releases,
-    get_release,
-    release_exists,
-)
+
 from release_pilot.git import get_commits
+from release_pilot.models import ReleaseResult
 from release_pilot.parser import parse_commits
 from release_pilot.semver import build_changeset
-from release_pilot.models import ReleaseResult
+from release_pilot.store import (
+    get_release,
+    init_db,
+    list_releases,
+    release_exists,
+    save_release,
+)
 
 # ── In-memory job store ─────────────────────────────────────────────────
 jobs: dict[str, dict] = {}
@@ -46,7 +48,7 @@ class JiraTicketGQL:
     summary: str
     status: str
     issue_type: str
-    priority: Optional[str]
+    priority: str | None
 
 
 @strawberry.type
@@ -64,9 +66,9 @@ class TraceabilityRowGQL:
     commit_type: str
     is_breaking: bool
     jira_tickets: list[JiraTicketGQL]
-    pr_number: Optional[int]
-    pr_url: Optional[str]
-    ci_status: Optional[CIStatusGQL]
+    pr_number: int | None
+    pr_url: str | None
+    ci_status: CIStatusGQL | None
 
 
 @strawberry.type
@@ -85,7 +87,7 @@ class ReleaseResultGQL:
     readiness: ReadinessReportGQL
     internal_announcement: str
     customer_notes: str
-    marketing_notes: Optional[str]
+    marketing_notes: str | None
     traceability: list[TraceabilityRowGQL]
 
 
@@ -102,8 +104,8 @@ class ReleaseSummaryGQL:
 class ReleaseJobGQL:
     job_id: str
     status: str
-    result: Optional[ReleaseResultGQL] = None
-    error: Optional[str] = None
+    result: ReleaseResultGQL | None = None
+    error: str | None = None
 
 
 @strawberry.input
@@ -111,7 +113,7 @@ class ReleaseInputGQL:
     version: str
     from_ref: str
     channel: str
-    thread_ts: Optional[str] = None
+    thread_ts: str | None = None
 
 
 # ── Converters ──────────────────────────────────────────────────────────
@@ -186,6 +188,7 @@ async def run_release_pipeline(
         log.info(f"[{version}] changeset ready: {len(changeset.commits)} commits")
 
         from slack_sdk import WebClient as SlackClient
+
         from release_pilot import config as release_config
 
         slack_client = SlackClient(token=release_config.SLACK_BOT_TOKEN)
@@ -208,9 +211,7 @@ async def run_release_pipeline(
         # Post to Slack before DB write so failures don't block delivery
         from release_pilot.slack_poster import post_all as slack_post_all
 
-        slack_post_all(
-            result, channel, release_config.SLACK_BOT_TOKEN, thread_ts=thread_ts
-        )
+        slack_post_all(result, channel, release_config.SLACK_BOT_TOKEN, thread_ts=thread_ts)
 
         try:
             if not release_exists(version):
@@ -270,6 +271,7 @@ async def run_release_pipeline(
         jobs[job_id]["error"] = f"{type(e).__name__}: {e}\n{traceback.format_exc()}"
         try:
             from slack_sdk import WebClient as _SlackClient
+
             from release_pilot import config as release_config
 
             _SlackClient(token=release_config.SLACK_BOT_TOKEN).chat_postMessage(
@@ -334,7 +336,7 @@ class Query:
         ]
 
     @strawberry.field
-    def release(self, version: str) -> Optional[ReleaseResultGQL]:
+    def release(self, version: str) -> ReleaseResultGQL | None:
         r = get_release(version)
         return _to_gql_result(r) if r else None
 
@@ -369,6 +371,7 @@ def startup():
 @app.get("/releases", response_class=HTMLResponse)
 def releases_index():
     from pathlib import Path
+
     from release_pilot import config as release_config
 
     pdf_dir = Path(release_config.PDF_DIR)
@@ -376,9 +379,7 @@ def releases_index():
     summaries = list_releases(limit=50)
     rows = ""
     for s in summaries:
-        badge = {"READY": "🟢", "HOLD": "🟡", "BLOCKED": "🔴"}.get(
-            s.recommendation, "⚪"
-        )
+        badge = {"READY": "🟢", "HOLD": "🟡", "BLOCKED": "🔴"}.get(s.recommendation, "⚪")
         pdf_exists = (pdf_dir / f"{s.version}.pdf").exists()
         pdf_link = (
             f'<a href="/releases/{s.version}.pdf" title="Download PDF">📄 PDF</a>'
@@ -431,9 +432,7 @@ def release_markdown(version: str):
     if not r:
         return PlainTextResponse("Release not found", status_code=404)
     marketing_section = (
-        f"\n\n---\n\n## Marketing Notes\n\n{r.marketing_notes}"
-        if r.marketing_notes
-        else ""
+        f"\n\n---\n\n## Marketing Notes\n\n{r.marketing_notes}" if r.marketing_notes else ""
     )
     internal_section = (
         f"\n\n---\n\n## Internal Announcement\n\n{r.internal_announcement}"
@@ -453,8 +452,10 @@ def release_markdown(version: str):
 @app.get("/releases/{version}.pdf")
 def release_pdf(version: str):
     from pathlib import Path
-    from release_pilot import config as release_config
+
     from fastapi import HTTPException
+
+    from release_pilot import config as release_config
 
     pdf_path = Path(release_config.PDF_DIR) / f"{version}.pdf"
     if not pdf_path.exists():
@@ -469,6 +470,7 @@ def release_pdf(version: str):
 @app.post("/releases/{version}/generate-pdf")
 def generate_pdf(version: str):
     from pathlib import Path
+
     from release_pilot import config as release_config
     from release_pilot.pdf_gen import generate as gen_pdf
 
@@ -499,6 +501,7 @@ def generate_pdf(version: str):
 @app.get("/releases/{version}", response_class=HTMLResponse)
 def release_detail(version: str):
     from pathlib import Path
+
     from release_pilot import config as release_config
 
     r = get_release(version)
@@ -517,9 +520,7 @@ def release_detail(version: str):
     internal_md = r.internal_announcement or "_No internal announcement generated._"
 
     rec = r.readiness.recommendation
-    badge_color = {"READY": "#0a8a45", "HOLD": "#b8860b", "BLOCKED": "#c0392b"}.get(
-        rec, "#555"
-    )
+    badge_color = {"READY": "#0a8a45", "HOLD": "#b8860b", "BLOCKED": "#c0392b"}.get(rec, "#555")
 
     return f"""<!DOCTYPE html>
 <html>

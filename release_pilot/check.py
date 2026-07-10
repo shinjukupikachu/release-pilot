@@ -1,6 +1,7 @@
 """Release readiness check: commits → Jira → author/manager grouping."""
 
 from __future__ import annotations
+
 import json
 import re
 import sqlite3
@@ -43,18 +44,12 @@ class AuthorGroup:
     @property
     def open_tickets(self) -> list[JiraInfo]:
         return [
-            t
-            for t in self.jira_tickets
-            if t.status.lower() not in ("done", "closed", "resolved")
+            t for t in self.jira_tickets if t.status.lower() not in ("done", "closed", "resolved")
         ]
 
     @property
     def closed_tickets(self) -> list[JiraInfo]:
-        return [
-            t
-            for t in self.jira_tickets
-            if t.status.lower() in ("done", "closed", "resolved")
-        ]
+        return [t for t in self.jira_tickets if t.status.lower() in ("done", "closed", "resolved")]
 
 
 @dataclass
@@ -96,9 +91,7 @@ def _load_commits_from_test_data() -> list[dict]:
     return []
 
 
-def _load_commits_from_db(
-    version: str, db_path: str = config.DB_PATH
-) -> list[dict] | None:
+def _load_commits_from_db(version: str, db_path: str = config.DB_PATH) -> list[dict] | None:
     """Return commit dicts from DB traceability for a known version, or None if not found."""
     try:
         with sqlite3.connect(db_path) as conn:
@@ -154,9 +147,7 @@ def run_check(version: str | None = None) -> ReadinessCheckResult:
     commit_infos: list[CommitInfo] = []
     for c in raw_commits:
         full_text = f"{c.get('subject', '')} {c.get('body', '')}"
-        keys = pre_parsed_keys.get(c.get("short_hash", "")) or _JIRA_KEY_RE.findall(
-            full_text
-        )
+        keys = pre_parsed_keys.get(c.get("short_hash", "")) or _JIRA_KEY_RE.findall(full_text)
         commit_infos.append(
             CommitInfo(
                 short_hash=c.get("short_hash", ""),

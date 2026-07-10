@@ -2,6 +2,7 @@
 """Release Pilot Slackbot — /release slash command router via Socket Mode."""
 
 from __future__ import annotations
+
 import os
 import sys
 
@@ -22,14 +23,10 @@ SERVICE_URL = os.environ.get("SERVICE_URL", "http://localhost:30080/graphql")
 SERVICE_BASE_URL = SERVICE_URL.rsplit("/graphql", 1)[0]
 
 if not SLACK_BOT_TOKEN:
-    print(
-        "ERROR: SLACK_BOT_TOKEN not set. Copy .env.example to .env and fill in your tokens."
-    )
+    print("ERROR: SLACK_BOT_TOKEN not set. Copy .env.example to .env and fill in your tokens.")
     sys.exit(1)
 if not SLACK_APP_TOKEN:
-    print(
-        "ERROR: SLACK_APP_TOKEN not set. Copy .env.example to .env and fill in your tokens."
-    )
+    print("ERROR: SLACK_APP_TOKEN not set. Copy .env.example to .env and fill in your tokens.")
     sys.exit(1)
 
 app = App(token=SLACK_BOT_TOKEN)
@@ -261,13 +258,9 @@ def _post_check_result(client, channel: str, thread_ts: str, result) -> None:
     from release_pilot.check import ReadinessCheckResult
 
     r: ReadinessCheckResult = result
-    overall = (
-        "🟢 *READY TO SHIP*" if r.is_ready else "🟡 *HOLD — open Jira tickets remain*"
-    )
+    overall = "🟢 *READY TO SHIP*" if r.is_ready else "🟡 *HOLD — open Jira tickets remain*"
     version_line = (
-        f"*Version:* {r.version}"
-        if r.version
-        else "*Source:* test data (latest commits)"
+        f"*Version:* {r.version}" if r.version else "*Source:* test data (latest commits)"
     )
     from_line = f"  *Since:* {r.from_ref}" if r.from_ref else ""
 
@@ -281,9 +274,7 @@ def _post_check_result(client, channel: str, thread_ts: str, result) -> None:
         f"({r.closed_count} ✅ closed / {r.open_count} ⚠️ open)\n\n"
         f"{overall}"
     )
-    client.chat_postMessage(
-        channel=channel, thread_ts=thread_ts, text=header, mrkdwn=True
-    )
+    client.chat_postMessage(channel=channel, thread_ts=thread_ts, text=header, mrkdwn=True)
 
     # One message per author group
     for grp in r.author_groups:
@@ -296,11 +287,7 @@ def _post_check_result(client, channel: str, thread_ts: str, result) -> None:
         if grp.jira_tickets:
             lines.append("   Jira tickets:")
             for ticket in grp.jira_tickets:
-                icon = (
-                    "✅"
-                    if ticket.status.lower() in ("done", "closed", "resolved")
-                    else "⚠️"
-                )
+                icon = "✅" if ticket.status.lower() in ("done", "closed", "resolved") else "⚠️"
                 type_tag = f"[{ticket.issue_type}] " if ticket.issue_type else ""
                 lines.append(
                     f"   {icon} `{ticket.key}` {type_tag}*{ticket.summary}* — _{ticket.status}_"
@@ -331,9 +318,7 @@ def _post_check_result(client, channel: str, thread_ts: str, result) -> None:
 
     if r.open_count > 0:
         open_keys = [
-            t.key
-            for t in r.all_jira
-            if t.status.lower() not in ("done", "closed", "resolved")
+            t.key for t in r.all_jira if t.status.lower() not in ("done", "closed", "resolved")
         ]
         sign_off_lines.append(
             f"\n⚠️ *{r.open_count} open ticket(s) blocking release:* {', '.join(f'`{k}`' for k in open_keys)}"

@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 import re
+
 from release_pilot.models import CommitInfo, ParsedCommit
 
 # Conventional commit subject: type(scope)!: description
@@ -27,16 +29,12 @@ def parse_body(body: str) -> tuple[str | None, list[str]]:
     m = _BREAKING_RE.search(body)
     if m:
         breaking_note = m.group(1).strip()
-    jira_keys = list(
-        dict.fromkeys(_JIRA_RE.findall(body))
-    )  # deduplicated, order-preserving
+    jira_keys = list(dict.fromkeys(_JIRA_RE.findall(body)))  # deduplicated, order-preserving
     return breaking_note, jira_keys
 
 
 def parse_commit(commit: CommitInfo) -> ParsedCommit:
-    commit_type, scope, is_breaking_subject, clean_subject = parse_subject(
-        commit.subject
-    )
+    commit_type, scope, is_breaking_subject, clean_subject = parse_subject(commit.subject)
     breaking_note, jira_keys = parse_body(commit.body)
     is_breaking = is_breaking_subject or breaking_note is not None
     # Also extract Jira keys from subject
