@@ -36,7 +36,11 @@ def _build_traceability_table(result: ReleaseResult) -> str:
         pr_str = f"[#{row.pr_number}]({row.pr_url})" if row.pr_number else "—"
         breaking_marker = " ⚡BREAKING" if row.is_breaking else ""
         lines.append(
-            f"| `{row.short_hash}` | {row.description}{breaking_marker} | {jira_str} | {pr_str} | {_ci_emoji(row.ci_status)} |"
+            f"| `{row.short_hash}` | "
+            f"{row.description}{breaking_marker} | "
+            f"{jira_str} | "
+            f"{pr_str} | "
+            f"{_ci_emoji(row.ci_status)} |"
         )
     return "\n".join(lines)
 
@@ -116,11 +120,17 @@ def post_all(
     slack_token: str | None = None,
     thread_ts: str | None = None,
 ) -> None:
-    """Post all 4 Slack messages for a release as thread replies. Errors are logged but not raised."""
+    """
+    Post all 4 Slack messages for a release as thread replies.
+
+    Errors are logged but not raised.
+    """
     token = slack_token or os.environ.get("SLACK_BOT_TOKEN")
     if not token or not _SLACK_AVAILABLE:
         print(
-            f"[slack_poster] Skipping Slack post — token={'set' if token else 'missing'}, sdk={_SLACK_AVAILABLE}"
+            "[slack_poster] Skipping Slack post — "
+            f"token={'set' if token else 'missing'}, "
+            f"sdk={_SLACK_AVAILABLE}"
         )
         return
 

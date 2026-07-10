@@ -13,16 +13,19 @@ _OUTPUT_CONTRACT = """
 
 ## Your task
 
-You receive a list of commits classified as "customer" or "marketing" tier. Write Customer Release Notes.
+You receive a list of commits classified as "customer" or "marketing" tier. Write Customer 
+Release Notes.
 
-Voice: clear, benefit-focused, low-jargon. For breaking changes, include "What you need to do" migration guidance.
+Voice: clear, benefit-focused, low-jargon. For breaking changes, include "What you need to do" 
+migration guidance.
 
 Return ONE JSON object only — no prose, no markdown fences:
 {
   "customer_notes": "## NyankoOS v2.3.0 — What's New\\n\\n..."
 }
 
-Format customer_notes as clean markdown. Use ## for version header, ### for categories (New Features, Bug Fixes, Performance, Important: Breaking Changes).
+Format customer_notes as clean markdown. Use ## for version header, ### for categories 
+(New Features, Bug Fixes, Performance, Important: Breaking Changes).
 
 Rules:
 - Do NOT include Jira ticket numbers (no NYANKO-XXX references)

@@ -102,7 +102,9 @@ def _load_commits_from_db(version: str, db_path: str = config.DB_PATH) -> list[d
             if not release:
                 return None, None
             rows = conn.execute(
-                "SELECT short_hash, description, jira_keys FROM traceability_rows WHERE release_id = ?",
+                "SELECT short_hash, description, jira_keys "
+                "FROM traceability_rows "
+                "WHERE release_id = ?",
                 (release["id"],),
             ).fetchall()
         commits = []

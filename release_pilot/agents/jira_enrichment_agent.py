@@ -14,7 +14,8 @@ Input format:
 
 For each key in jira_keys:
 1. Call get_jira_issue(key=<key>)
-2. Extract: key, summary (from fields.summary), status (from fields.status.name), issue_type (from fields.issuetype.name), priority (from fields.priority.name if present)
+2. Extract: key, summary (from fields.summary), status (from fields.status.name), issue_type
+   (from fields.issuetype.name), priority (from fields.priority.name if present)
 
 Return ONE JSON object only — no prose, no markdown fences:
 {
@@ -30,7 +31,8 @@ Return ONE JSON object only — no prose, no markdown fences:
 }
 
 If get_jira_issue returns {"error": "not_found", "key": "..."}, include it as:
-{"key": "NYANKO-XXX", "summary": "Not found", "status": "Unknown", "issue_type": "Unknown", "priority": null}
+{"key": "NYANKO-XXX", "summary": "Not found", "status": "Unknown", 
+ "issue_type": "Unknown", "priority": null}
 
 Return ONLY the JSON object. No explanations.
 """

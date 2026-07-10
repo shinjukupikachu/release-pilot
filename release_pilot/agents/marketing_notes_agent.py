@@ -13,7 +13,8 @@ _OUTPUT_CONTRACT = """
 
 ## Your task
 
-You receive a list of commits classified as "marketing" tier. Write Marketing Release Notes for prospects, partners, and industry audiences.
+You receive a list of commits classified as "marketing" tier. Write Marketing Release Notes 
+for prospects, partners, and industry audiences.
 
 Voice: outcome-first, aspirational but grounded. Lead with business value. No engineering jargon.
 

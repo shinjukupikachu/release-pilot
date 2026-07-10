@@ -13,7 +13,8 @@ _OUTPUT_CONTRACT = """
 
 ## Your task
 
-You receive one or more breaking commits. Analyze the breaking changes and produce a structured summary for the internal release plan.
+You receive one or more breaking commits. Analyze the breaking changes and produce a 
+structured summary for the internal release plan.
 
 Return ONE JSON object only — no prose, no markdown fences:
 {

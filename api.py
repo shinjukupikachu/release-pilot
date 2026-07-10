@@ -567,7 +567,13 @@ def release_detail(version: str):
       {pdf_button}
     </div>
   </div>
-  <div class="meta">Readiness score: {r.readiness.score}/100 &nbsp;·&nbsp; Suggested bump: {r.suggested_bump}</div>
+  (
+    '<div class="meta">'
+    f"Readiness score: {r.readiness.score}/100 "
+    "&nbsp;·&nbsp; "
+    f"Suggested bump: {r.suggested_bump}"
+    "</div>"
+  )
 
   <div class="tabs">
     <button class="tab-btn active" onclick="showTab('customer', this)">📋 Customer</button>

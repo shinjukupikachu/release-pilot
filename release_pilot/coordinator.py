@@ -34,7 +34,8 @@ def _llm_label() -> str:
 
 
 async def run(changeset: ChangeSet, progress_cb=None) -> ReleaseResult:
-    """Three-phase async pipeline. Phase 0: enrichment. Phase 1: classify + readiness. Phase 2: notes.
+    """Three-phase async pipeline. Phase 0: enrichment. Phase 1: classify + 
+       readiness. Phase 2: notes.
 
     TEST_DATA=1 mocks only Phase 0 (Jira + GitHub fixtures); Phases 1 & 2 still call the LLM.
     progress_cb(msg): optional callable that posts status updates to Slack.
@@ -97,8 +98,14 @@ async def run(changeset: ChangeSet, progress_cb=None) -> ReleaseResult:
         else f"top {len(marketing_source)} customer highlights (no marketing-tier commits)"
     )
     phase2_agents = [
-        f"• *Customer Notes*: drafting release notes for {len(customer_commits)} customer-facing commits",
-        f"• *Marketing Notes*: writing copy for {marketing_label}",
+        (
+            f"• *Customer Notes*: drafting release notes for "
+            f"{len(customer_commits)} customer-facing commits"
+        ),
+        (
+            f"• *Marketing Notes*: writing copy for "
+            f"{marketing_label}"
+        ),
     ]
     if enriched.breaking:
         phase2_agents.append(
@@ -149,7 +156,8 @@ def _load_enrichment_from_test_data() -> tuple[dict, dict]:
     prs_raw = json.loads((_config.TEST_DATA_DIR / "github_prs.json").read_text())
     ci_raw = json.loads((_config.TEST_DATA_DIR / "github_check_runs.json").read_text())
 
-    # Normalise Jira: {key: {fields: {summary, status: {name}, issuetype: {name}, priority: {name}}}}
+    # Normalise Jira: {key: {fields: {summary, status: {name}, issuetype: {name}, 
+    # priority: {name}}}}
     # → {key: {key, summary, status, issue_type, priority}}
     issues = {}
     for key, raw in jira_raw.items():
@@ -400,8 +408,10 @@ async def _run_agent(agent_def: AgentDefinition, user_msg: str) -> dict:
     )
     try:
         return await asyncio.wait_for(coro, timeout=60.0)
-    except TimeoutError:
-        raise RuntimeError(f"Agent '{agent_def.description}' timed out after 60s")
+    except TimeoutError as err:
+        raise RuntimeError(
+            f"Agent '{agent_def.description}' timed out after 60s"
+        ) from err
 
 
 async def _run_agent_kimi(agent_def: AgentDefinition, user_msg: str) -> dict:

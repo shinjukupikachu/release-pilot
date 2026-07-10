@@ -321,7 +321,8 @@ def _post_check_result(client, channel: str, thread_ts: str, result) -> None:
             t.key for t in r.all_jira if t.status.lower() not in ("done", "closed", "resolved")
         ]
         sign_off_lines.append(
-            f"\n⚠️ *{r.open_count} open ticket(s) blocking release:* {', '.join(f'`{k}`' for k in open_keys)}"
+            f"\n⚠️ *{r.open_count} open ticket(s) blocking release:* "
+            f"{', '.join(f'`{k}`' for k in open_keys)}"
         )
 
     client.chat_postMessage(
