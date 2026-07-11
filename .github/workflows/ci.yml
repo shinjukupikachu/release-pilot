@@ -52,7 +52,7 @@ jobs:
       
       - name: Run Bandit security scan
         run: |
-          bandit -r release_pilot api.py slackbot.py mcp_server.py
+          bandit -r release_pilot api.py slackbot.py mcp_server.py -ll
 
       - name: Audit Python dependencies
         run: pip-audit -r requirements.txt
