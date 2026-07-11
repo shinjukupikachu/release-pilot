@@ -49,6 +49,13 @@ jobs:
 
       - name: Run tests
         run: pytest -v
+      
+      - name: Run Bandit security scan
+        run: |
+          bandit -r release_pilot api.py slackbot.py mcp_server.py -ll
+
+      - name: Audit Python dependencies
+        run: pip-audit -r requirements.txt
 
   build-and-push:
     name: Build and publish image
