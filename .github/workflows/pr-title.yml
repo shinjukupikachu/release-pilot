@@ -1,0 +1,37 @@
+name: PR title
+
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - synchronize
+      - reopened
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  validate:
+    name: Conventional PR title
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Validate PR title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        shell: bash
+        run: |
+          pattern='^(feat|fix|docs|style|refactor|test|ci|build|chore|perf|revert)(\([a-z0-9._/-]+\))?!?: .+'
+
+          if [[ ! "$PR_TITLE" =~ $pattern ]]; then
+            echo "Invalid PR title:"
+            echo "  $PR_TITLE"
+            echo
+            echo "Use Conventional Commit format, for example:"
+            echo "  feat(api): add release endpoint"
+            echo "  fix(k8s): correct service target port"
+            echo "  ci: add security scans"
+            exit 1
+          fi
