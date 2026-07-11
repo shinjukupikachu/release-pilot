@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: release-agent
+  namespace: release-agent
+  labels:
+    app: release-agent
+spec:
+  selector:
+    matchLabels:
+      app: release-agent
+
+  namespaceSelector:
+    matchNames:
+      - release-agent
+
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s
+      scrapeTimeout: 10s
