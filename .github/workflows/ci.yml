@@ -160,19 +160,46 @@ jobs:
       - name: Show manifest change
         run: git diff -- k8s/deployment.yaml
 
-      - name: Commit deployment update
+      - name: Create deployment update branch
+        id: deploy_branch
         env:
           IMAGE_TAG: ${{ steps.image.outputs.tag }}
         shell: bash
         run: |
           if git diff --quiet -- k8s/deployment.yaml; then
-            echo "Deployment manifest already uses this image."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Manifest already uses image ${IMAGE_TAG}."
             exit 0
           fi
 
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          BRANCH="deploy/image-${IMAGE_TAG}"
 
+          git config user.name "github-actions[bot]"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git switch -c "$BRANCH"
           git add k8s/deployment.yaml
-          git commit -m "chore(deploy): use image ${IMAGE_TAG} [skip ci]"
-          git push origin HEAD:main
+          git commit -m "chore(deploy): use image ${IMAGE_TAG}"
+          git push --force-with-lease origin "$BRANCH"
+
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+
+      - name: Open deployment pull request
+        if: steps.deploy_branch.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ steps.deploy_branch.outputs.branch }}
+          IMAGE_TAG: ${{ steps.image.outputs.tag }}
+        shell: bash
+        run: |
+          if gh pr view "$BRANCH" >/dev/null 2>&1; then
+            echo "Deployment PR already exists for ${IMAGE_TAG}."
+          else
+            gh pr create \
+              --base main \
+              --head "$BRANCH" \
+              --title "chore(deploy): use image ${IMAGE_TAG}" \
+              --body "Updates the Kubernetes Deployment to use the immutable image tag \`${IMAGE_TAG}\` built from commit \`${GITHUB_SHA}\`."
+          fi
