@@ -10,7 +10,7 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/shinjukupikachu/personal_project.git
+    repoURL: https://github.com/shinjukupikachu/release-pilot.git
     targetRevision: main
     path: k8s
 

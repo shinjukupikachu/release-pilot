@@ -148,7 +148,7 @@ jobs:
 
           for line in lines:
               if line.strip().startswith(
-                  "image: ghcr.io/shinjukupikachu/personal_project:"
+                  "image: ghcr.io/shinjukupikachu/release-pilot:"
               ):
                   indent = line[: len(line) - len(line.lstrip())]
                   updated.append(f"{indent}image: {image}")
