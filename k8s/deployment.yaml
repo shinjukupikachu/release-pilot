@@ -23,7 +23,7 @@ spec:
         - name: release-agent
 
           image: ghcr.io/shinjukupikachu/release-pilot:b858b60
-
+          
           imagePullPolicy: Always
 
           ports:
