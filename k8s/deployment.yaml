@@ -22,8 +22,8 @@ spec:
       containers:
         - name: release-agent
 
-          image: ghcr.io/shinjukupikachu/release-pilot:63d8e13
-
+          image: ghcr.io/shinjukupikachu/release-pilot:59b9569
+          
           imagePullPolicy: Always
 
           ports:
