@@ -1,0 +1,39 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: release-agent-slack
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  route:
+    receiver: slack-release-agent
+    groupBy:
+      - alertname
+      - namespace
+      - service
+    groupWait: 10s
+    groupInterval: 1m
+    repeatInterval: 4h
+    matchers:
+      - name: service
+        value: release-agent
+        matchType: "="
+
+  receivers:
+    - name: slack-release-agent
+      slackConfigs:
+        - apiURL:
+            name: alertmanager-slack-webhook
+            key: url
+          sendResolved: true
+          title: >-
+            [{{ .Status | toUpper }}]
+            {{ .CommonLabels.alertname }}
+          text: >-
+            {{ range .Alerts }}
+            *Severity:* {{ .Labels.severity }}
+            *Namespace:* {{ .Labels.namespace }}
+            *Summary:* {{ .Annotations.summary }}
+            *Description:* {{ .Annotations.description }}
+            {{ end }}

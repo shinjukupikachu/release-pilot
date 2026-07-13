@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: release-agent-test-alert
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: release-agent.test
+      rules:
+        - alert: ReleaseAgentTest
+          expr: vector(1)
+          for: 10s
+          labels:
+            severity: warning
+            service: release-agent
+            namespace: monitoring
+          annotations:
+            summary: Release Pilot test alert
+            description: This is a test alert from Prometheus.

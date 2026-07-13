@@ -11,3 +11,8 @@ grafana:
 
 alertmanager:
   enabled: true
+
+  alertmanagerSpec:
+    alertmanagerConfigSelector:
+      matchLabels:
+        release: monitoring
